@@ -20,7 +20,7 @@ enum OrderType {
 
 type Order {
   id: ID!
-  staffId: String
+  userId: String
   teamId: String
   items: [OrderItem!]!
   notes: String
@@ -39,7 +39,7 @@ input OrderItemInput {
 
 input CreateOrderInput {
   orderType: OrderType
-  staffId: ID!
+  userId: ID!
   notes: String
   items: [OrderItemInput!]!
 }

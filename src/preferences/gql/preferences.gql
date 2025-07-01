@@ -25,7 +25,7 @@ enum MilkStrength {
 
 type Preferences {
   id: ID!
-  staffId: ID!
+  userId: ID!
   drinkType: DrinkType!
   sweetenerType: SweetenerType!
   sugarAmount: Int!
@@ -36,7 +36,7 @@ type Preferences {
 # --------------------- Inputs ---------------------
 
 input CreatePreferencesInput {
-  staffId: ID!
+  userId: ID!
   drinkType: DrinkType!
   sweetenerType: SweetenerType!
   sugarAmount: Int!
@@ -59,7 +59,7 @@ type UpdatePreferencesResponse {
 # --------------------- Queries ---------------------
 
 type Query {
-  getPreferencesByStaff(staffId: ID!): Preferences
+  getPreferencesByUser(userId: ID!): Preferences
 }
 
 # --------------------- Mutations ---------------------

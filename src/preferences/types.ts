@@ -5,7 +5,7 @@ import {
 } from "./gql/preferences-gen.gql";
 
 export type CreatePreferencesInput = {
-  staffId: string;
+  userId: string;
   drinkType: DrinkType;
   sweetenerType: SweetenerType;
   sugarAmount: number;
@@ -17,7 +17,7 @@ export type UpdatePreferencesInput = CreatePreferencesInput;
 
 export type Preferences = {
   id: string;
-  staffId: string;
+  userId: string;
   drinkType: DrinkType;
   sweetenerType: SweetenerType;
   sugarAmount: number;

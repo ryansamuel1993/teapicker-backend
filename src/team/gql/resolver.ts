@@ -6,12 +6,12 @@ interface TeamContext {
 }
 
 /** Query handlers */
-const getAllTeams = async (
+const getAllTeamss = async (
   _parent: unknown,
   _args: unknown,
   ctx: TeamContext,
 ) => {
-  return ctx.teamService.getAllTeams();
+  return ctx.teamService.getAllTeamss();
 };
 
 const createTeam = async (
@@ -19,14 +19,14 @@ const createTeam = async (
   args: { input: gql.CreateTeamInput },
   ctx: TeamContext,
 ) => {
-  const { name, staff } = args.input;
+  const { name, user } = args.input;
 
-  return ctx.teamService.createTeam({ name, staff });
+  return ctx.teamService.createTeam({ name, user });
 };
 
 export const resolver = {
   Query: {
-    getAllTeams: getAllTeams,
+    getAllTeamss: getAllTeamss,
   },
   Mutation: {
     createTeam,

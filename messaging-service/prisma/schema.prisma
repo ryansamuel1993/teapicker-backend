@@ -1,0 +1,23 @@
+datasource db {
+  provider = "sqlite"
+  url      = "file:./logs.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model EmailLog {
+  id        String   @id @default(uuid())
+  to        String
+  subject   String
+  content   String
+  sentAt    DateTime @default(now())
+}
+
+model SMSLog {
+  id        String   @id @default(uuid())
+  to        String
+  body      String
+  sentAt    DateTime @default(now())
+}

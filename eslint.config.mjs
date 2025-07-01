@@ -5,7 +5,6 @@ import { dirname } from "path";
 import tsParser from "@typescript-eslint/parser";
 import tsPlugin from "@typescript-eslint/eslint-plugin";
 import importPlugin from "eslint-plugin-import";
-import sortPlugin from "eslint-plugin-simple-import-sort";
 import jsxA11yPlugin from "eslint-plugin-jsx-a11y";
 import commentsPlugin from "eslint-plugin-eslint-comments";
 
@@ -46,7 +45,6 @@ export default [
     },
     plugins: {
       import: importPlugin,
-      "simple-import-sort": sortPlugin,
       "jsx-a11y": jsxA11yPlugin,
       "eslint-comments": commentsPlugin,
     },

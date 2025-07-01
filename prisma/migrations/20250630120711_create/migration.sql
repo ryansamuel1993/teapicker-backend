@@ -1,11 +1,11 @@
 -- CreateTable
-CREATE TABLE "Staff" (
+CREATE TABLE "User" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "contactNumber" INTEGER NOT NULL,
     "teamId" TEXT NOT NULL,
-    CONSTRAINT "Staff_teamId_fkey" FOREIGN KEY ("teamId") REFERENCES "Team" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT "User_teamId_fkey" FOREIGN KEY ("teamId") REFERENCES "Team" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 -- CreateTable
@@ -17,13 +17,13 @@ CREATE TABLE "Team" (
 -- CreateTable
 CREATE TABLE "Preferences" (
     "id" TEXT NOT NULL PRIMARY KEY,
-    "staffId" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
     "drinkType" TEXT NOT NULL,
     "sweetenerType" TEXT NOT NULL,
     "sugarAmount" INTEGER NOT NULL,
     "milkStrength" TEXT NOT NULL,
     "notes" TEXT,
-    CONSTRAINT "Preferences_staffId_fkey" FOREIGN KEY ("staffId") REFERENCES "Staff" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT "Preferences_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 -- CreateTable
@@ -37,36 +37,36 @@ CREATE TABLE "Boost" (
 -- CreateTable
 CREATE TABLE "BoostUsage" (
     "id" TEXT NOT NULL PRIMARY KEY,
-    "staffId" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
     "boostId" TEXT NOT NULL,
     "remaining" INTEGER NOT NULL,
     "notes" TEXT,
-    CONSTRAINT "BoostUsage_staffId_fkey" FOREIGN KEY ("staffId") REFERENCES "Staff" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT "BoostUsage_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT "BoostUsage_boostId_fkey" FOREIGN KEY ("boostId") REFERENCES "Boost" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 -- CreateTable
 CREATE TABLE "Rating" (
     "id" TEXT NOT NULL PRIMARY KEY,
-    "staffId" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
     "orderId" TEXT NOT NULL,
     "score" TEXT NOT NULL,
     "notes" TEXT,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT "Rating_orderId_fkey" FOREIGN KEY ("orderId") REFERENCES "Order" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
-    CONSTRAINT "Rating_staffId_fkey" FOREIGN KEY ("staffId") REFERENCES "Staff" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT "Rating_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 -- CreateTable
 CREATE TABLE "Order" (
     "id" TEXT NOT NULL PRIMARY KEY,
-    "staffId" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
     "teamId" TEXT NOT NULL,
     "notes" TEXT,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "completed" BOOLEAN NOT NULL DEFAULT false,
     "orderType" TEXT NOT NULL DEFAULT 'INTERNAL',
-    CONSTRAINT "Order_staffId_fkey" FOREIGN KEY ("staffId") REFERENCES "Staff" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT "Order_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT "Order_teamId_fkey" FOREIGN KEY ("teamId") REFERENCES "Team" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
@@ -91,7 +91,7 @@ CREATE TABLE "OrderItem" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Preferences_staffId_key" ON "Preferences"("staffId");
+CREATE UNIQUE INDEX "Preferences_userId_key" ON "Preferences"("userId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Rating_staffId_orderId_key" ON "Rating"("staffId", "orderId");
+CREATE UNIQUE INDEX "Rating_userId_orderId_key" ON "Rating"("userId", "orderId");

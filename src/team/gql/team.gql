@@ -3,20 +3,20 @@
 type Team {
   id: ID!
   name: String!
-  members: [Staff!]!
+  members: [User]
 }
 
 # --------------------- Inputs --------------------- #
 
 input CreateTeamInput {
   name: String!
-  staff: [CreateStaffInput]
+  user: [CreateUserInput]
 }
 
 # --------------------- Queries --------------------- #
 
 type Query {
-  getAllTeams: [Team!]!
+  getAllTeamss: [Team]
 }
 
 # --------------------- Mutations --------------------- #

@@ -4,7 +4,7 @@ import { Score } from "../gql/rating-gen.gql";
 
 export interface IRatingsRepository {
   create(input: CreateRatingInput): Promise<Rating | undefined>;
-  get(staffId: string): Promise<Rating[]>;
+  get(userId: string): Promise<Rating[]>;
 }
 
 export class RatingsRepository implements IRatingsRepository {
@@ -16,10 +16,10 @@ export class RatingsRepository implements IRatingsRepository {
         orderId: input.orderId,
         score: input.score,
         notes: input.notes,
-        staffId: input.staffId,
+        userId: input.userId,
       },
       include: {
-        staff: true,
+        user: true,
       },
     });
 
@@ -28,14 +28,14 @@ export class RatingsRepository implements IRatingsRepository {
       score: result.score as Score,
       notes: result.notes ?? undefined,
       createdAt: result.createdAt,
-      staffId: result.staffId,
+      userId: result.userId,
     };
   }
 
-  async get(staffId: string): Promise<Rating[]> {
+  async get(userId: string): Promise<Rating[]> {
     const results = await this.prisma.rating.findMany({
-      where: { staffId },
-      include: { staff: true },
+      where: { userId },
+      include: { user: true },
     });
 
     return results.map((result) => ({
@@ -43,7 +43,7 @@ export class RatingsRepository implements IRatingsRepository {
       score: result.score as Score,
       notes: result.notes ?? undefined,
       createdAt: result.createdAt,
-      staffId: result.staffId,
+      userId: result.userId,
     }));
   }
 }

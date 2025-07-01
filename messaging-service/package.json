@@ -1,0 +1,18 @@
+{
+  "name": "messaging-service",
+  "scripts": {
+    "start": "ts-node src/worker.ts"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.11.0",
+    "dotenv": "^10.0.0",
+    "nodemailer": "^6.9.0",
+    "prisma": "^6.11.0",
+    "twilio": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/nodemailer": "^6.4.17",
+    "ts-node": "^10.0.0",
+    "typescript": "^5.0.0"
+  }
+}

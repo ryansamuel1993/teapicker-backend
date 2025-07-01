@@ -18,17 +18,17 @@ export class OrderRepository implements IOrderRepository {
   ) {}
 
   async createOrder(input: CreateOrderInput): Promise<Order> {
-    const { staffId, notes, items } = input;
+    const { userId, notes, items } = input;
 
-    const team = await this.teamRepository.getTeamByStaffId(staffId);
+    const team = await this.teamRepository.getTeamByUserId(userId);
 
     if (!team) {
-      throw new Error("No team found for staff member");
+      throw new Error("No team found for user member");
     }
 
     const result = await this.prisma.order.create({
       data: {
-        staffId,
+        userId,
         teamId: team.id,
         notes,
         items: {
@@ -39,7 +39,7 @@ export class OrderRepository implements IOrderRepository {
         },
       },
       include: {
-        staff: true,
+        user: true,
         team: true,
         items: {
           include: { item: true },

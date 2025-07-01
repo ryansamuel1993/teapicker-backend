@@ -18,7 +18,7 @@ export type CreateOrderInputItem = {
 };
 
 export type CreateOrderInput = {
-  staffId: string;
+  userId: string;
   notes?: string;
   items: CreateOrderInputItem[];
 };

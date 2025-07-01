@@ -40,7 +40,7 @@ enum Score {
   Excellent
 }
 
-model Staff {
+model User {
   id            String         @id @default(uuid())
   name          String
   email         String
@@ -56,19 +56,20 @@ model Staff {
 model Team {
   id      String   @id @default(uuid())
   name    String
+  createdAt DateTime  @default(now())
   orders  Order[]  @relation("TeamToOrder")
-  members Staff[]
+  members User[]
 }
 
 model Preferences {
   id            String         @id @default(uuid())
-  staffId       String         @unique
+  userId       String         @unique
   drinkType     DrinkType
   sweetenerType SweetenerType
   sugarAmount   Int
   milkStrength  MilkStrength
   notes         String?
-  staff         Staff          @relation(fields: [staffId], references: [id])
+  user         User          @relation(fields: [userId], references: [id])
 }
 
 model Boost {
@@ -81,38 +82,41 @@ model Boost {
 
 model BoostUsage {
   id        String  @id @default(uuid())
-  staffId   String
+  userId   String
   boostId   String
   remaining Int
   notes     String?
-  staff     Staff   @relation(fields: [staffId], references: [id])
+  user     User   @relation(fields: [userId], references: [id])
   boost     Boost   @relation(fields: [boostId], references: [id])
 }
 
 model Rating {
   id        String    @id @default(uuid())
-  staffId   String
+  userId   String
   orderId   String
-  score     Score
+  quality   Score
+  service   Score
+  overall   Score
   notes     String?
+  voiceNote      Bytes
   createdAt DateTime  @default(now())
 
   order     Order     @relation(fields: [orderId], references: [id])
-  staff     Staff     @relation(fields: [staffId], references: [id])
+  user     User     @relation(fields: [userId], references: [id])
 
-  @@unique([staffId, orderId])
+  @@unique([userId, orderId])
 }
 
 model Order {
   id          String      @id @default(uuid())
-  staffId     String
+  userId     String
   teamId      String
   notes       String?
   createdAt   DateTime    @default(now())
   completed   Boolean     @default(false)
   orderType   OrderType   @default(INTERNAL)
 
-  staff       Staff       @relation(fields: [staffId], references: [id])
+  user       User       @relation(fields: [userId], references: [id])
   team        Team        @relation("TeamToOrder", fields: [teamId], references: [id])
   items       OrderItem[]
   ratings     Rating[]

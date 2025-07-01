@@ -1,6 +1,6 @@
 # --------------------- Types --------------------#
 
-type Staff {
+type User {
   id: ID!
   teamId: String
   name: String!
@@ -10,44 +10,44 @@ type Staff {
 
 # --------------------- Inputs --------------------#
 
-input CreateStaffInput {
+input CreateUserInput {
   name: String!
   teamId: String
-  email: String!
-  contactNumber: Int!
+  email: String
+  contactNumber: Int
 }
 
-input UpdateStaffInput {
+input UpdateUserInput {
   id: ID!
-  teamId: String!
-  name: String!
-  email: String!
-  contactNumber: Int!
+  teamId: String
+  name: String
+  email: String
+  contactNumber: Int
 }
 
 # --------------------- Responses --------------------#
 
-type CreateStaffResponse {
+type CreateUserResponse {
   status: ResponseStatus
-  data: [Staff!]
+  data: [User]
 }
 
-type UpdateStaffResponse {
+type UpdateUserResponse {
   status: ResponseStatus
-  data: Staff
+  data: User
 }
 
 
 # --------------------- Queries --------------------#
 
 type Query {
-  get(staffId: ID!): Staff
-  listAllStaff: [Staff!]!
+  get(userId: ID): User
+  getAllUsers: [User]
 }
 
 # --------------------- Mutations --------------------#
 
 type Mutation {
-  createStaff(input: CreateStaffInput!): Staff!
-  updateStaff(input: UpdateStaffInput!): Staff!
+  createUser(input: CreateUserInput): User
+  updateUser(input: UpdateUserInput): User
 }

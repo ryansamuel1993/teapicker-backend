@@ -29,8 +29,8 @@ const config: CodegenConfig = {
       },
     },
 
-    "src/staff/gql/staff-gen.gql.ts": {
-      schema: ["./src/common/gql/common.gql", "./src/staff/gql/staff.gql"],
+    "src/user/gql/user-gen.gql.ts": {
+      schema: ["./src/common/gql/common.gql", "./src/user/gql/user.gql"],
       plugins: ["typescript", "typescript-resolvers"],
       config: {
         maybeValue: "T",
@@ -40,7 +40,7 @@ const config: CodegenConfig = {
     "src/team/gql/team-gen.gql.ts": {
       schema: [
         "./src/common/gql/common.gql",
-        "./src/staff/gql/staff.gql",
+        "./src/user/gql/user.gql",
         "./src/team/gql/team.gql",
       ],
       plugins: ["typescript", "typescript-resolvers"],

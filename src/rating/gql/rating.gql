@@ -12,13 +12,13 @@ type Rating {
   score: Score
   comment: String
   createdAt: String!
-  staffId: ID!
+  userId: ID!
 }
 
 # --------------------- Inputs --------------------#
 
 input CreateRatingInput {
-  staffId: String!
+  userId: String!
   orderId: String!
   score: Score!
   comment: String
@@ -34,7 +34,7 @@ type CreateRatingResponse {
 # --------------------- Queries --------------------#
 
 type Query {
-  getRatingsByStaff(staffId: ID!): [Rating!]!
+  getRatingsByUser(userId: ID!): [Rating!]!
   getRatingById(id: ID!): Rating
 }
 

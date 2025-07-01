@@ -5,7 +5,7 @@ type ResponseStatus {
   code: String
 }
 
-type Staff {
+type User {
   id: ID!
 }
 

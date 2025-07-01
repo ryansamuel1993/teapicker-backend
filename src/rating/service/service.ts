@@ -3,7 +3,7 @@ import { CreateRatingInput, Rating } from "../types";
 
 export interface IRatingsService {
   createRating(input: CreateRatingInput): Promise<Rating | undefined>;
-  getRatingsByStaff(staffId: string): Promise<Rating[]>;
+  getRatingsByUser(userId: string): Promise<Rating[]>;
 }
 
 export class RatingsService implements IRatingsService {
@@ -12,7 +12,7 @@ export class RatingsService implements IRatingsService {
   createRating(input: CreateRatingInput): Promise<Rating | undefined> {
     return this.ratingsRepository.create(input);
   }
-  getRatingsByStaff(staffId: string): Promise<Rating[]> {
-    return this.ratingsRepository.get(staffId);
+  getRatingsByUser(userId: string): Promise<Rating[]> {
+    return this.ratingsRepository.get(userId);
   }
 }

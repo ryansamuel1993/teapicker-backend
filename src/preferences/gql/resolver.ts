@@ -13,13 +13,13 @@ export const resolver = {
   Query: {
     get: async (
       _parent: unknown,
-      args: { staffId: string },
+      args: { userId: string },
       ctx: PreferencesContext,
     ): Promise<gql.Preferences> => {
-      const result = await ctx.preferencesService.get(args.staffId);
+      const result = await ctx.preferencesService.get(args.userId);
 
       if (!result) {
-        throw new Error("No preferences found for staff member");
+        throw new Error("No preferences found for user member");
       }
 
       return result;

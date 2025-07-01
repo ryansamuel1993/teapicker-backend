@@ -12,12 +12,12 @@ async function seed() {
   await prisma.modifierUsage.deleteMany();
   await prisma.preferences.deleteMany();
   await prisma.teaLog.deleteMany();
-  await prisma.staff.deleteMany();
+  await prisma.user.deleteMany();
 
-  console.log("🧑‍🤝‍🧑 Seeding staff...");
+  console.log("🧑‍🤝‍🧑 Seeding user...");
 
   for (let i = 0; i < 5; i++) {
-    const staff = await prisma.staff.create({
+    const user = await prisma.user.create({
       data: {
         name: faker.person.fullName(),
       },
@@ -25,7 +25,7 @@ async function seed() {
 
     await prisma.preferences.create({
       data: {
-        staffId: staff.id,
+        userId: user.id,
         drinkType: faker.helpers.arrayElement(DRINKS),
         sweetenerType: faker.helpers.arrayElement(SWEETENERS),
         sugarAmount: faker.number.int({ min: 0, max: 3 }),
@@ -47,7 +47,7 @@ async function seed() {
     for (const mod of modifiers) {
       await prisma.modifierUsage.create({
         data: {
-          staffId: staff.id,
+          userId: user.id,
           modifier: mod,
           remaining: faker.number.int({ min: 1, max: 4 }),
           notes: faker.lorem.words(2),

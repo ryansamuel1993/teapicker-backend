@@ -2,7 +2,7 @@ import { Score } from "./gql/rating-gen.gql";
 
 export type CreateRatingInput = {
   orderId: string;
-  staffId: string;
+  userId: string;
   score: Score;
   comment?: string;
 };
@@ -12,5 +12,5 @@ export type Rating = {
   score: Score;
   notes?: string;
   createdAt: Date;
-  staffId: string;
+  userId: string;
 };

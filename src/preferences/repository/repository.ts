@@ -11,9 +11,9 @@ import {
 } from "../gql/preferences-gen.gql";
 
 export interface IPreferencesRepository {
-  create(input: CreatePreferencesInput): Promise<Preferences>;
-  update(input: CreatePreferencesInput): Promise<Preferences>;
-  get(staffId: string): Promise<Preferences | undefined>;
+  createPreferences(input: CreatePreferencesInput): Promise<Preferences>;
+  updatePreferences(input: CreatePreferencesInput): Promise<Preferences>;
+  getPreferences(userId: string): Promise<Preferences | undefined>;
 }
 
 export class PreferencesRepository implements IPreferencesRepository {
@@ -21,7 +21,7 @@ export class PreferencesRepository implements IPreferencesRepository {
 
   private toPrismaEnums(input: CreatePreferencesInput) {
     return {
-      staffId: input.staffId,
+      userId: input.userId,
       drinkType: input.drinkType as $Enums.DrinkType,
       sweetenerType: input.sweetenerType as $Enums.SweetenerType,
       sugarAmount: input.sugarAmount,
@@ -32,7 +32,7 @@ export class PreferencesRepository implements IPreferencesRepository {
 
   private fromPrisma(result: {
     id: string;
-    staffId: string;
+    userId: string;
     drinkType: $Enums.DrinkType;
     sweetenerType: $Enums.SweetenerType;
     sugarAmount: number;
@@ -41,7 +41,7 @@ export class PreferencesRepository implements IPreferencesRepository {
   }): Preferences {
     return {
       id: result.id,
-      staffId: result.staffId,
+      userId: result.userId,
       drinkType: result.drinkType as DrinkType,
       sweetenerType: result.sweetenerType as SweetenerType,
       sugarAmount: result.sugarAmount,
@@ -50,29 +50,29 @@ export class PreferencesRepository implements IPreferencesRepository {
     };
   }
 
-  async create(input: CreatePreferencesInput): Promise<Preferences> {
+  async createPreferences(input: CreatePreferencesInput): Promise<Preferences> {
     const result = await this.prisma.preferences.create({
       data: this.toPrismaEnums(input),
-      include: { staff: true },
+      include: { user: true },
     });
 
     return this.fromPrisma(result);
   }
 
-  async update(input: UpdatePreferencesInput): Promise<Preferences> {
+  async updatePreferences(input: UpdatePreferencesInput): Promise<Preferences> {
     const result = await this.prisma.preferences.update({
-      where: { staffId: input.staffId },
+      where: { userId: input.userId },
       data: this.toPrismaEnums(input),
-      include: { staff: true },
+      include: { user: true },
     });
 
     return this.fromPrisma(result);
   }
 
-  async get(staffId: string): Promise<Preferences | undefined> {
+  async getPreferences(userId: string): Promise<Preferences | undefined> {
     const result = await this.prisma.preferences.findUnique({
-      where: { staffId },
-      include: { staff: true },
+      where: { userId },
+      include: { user: true },
     });
 
     return result ? this.fromPrisma(result) : undefined;

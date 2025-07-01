@@ -10,12 +10,12 @@ export type RatingsContext = {
   ratingsService: IRatingsService;
 };
 
-const getRatingsByStaffFn = async (
+const getRatingsByUserFn = async (
   _parent: unknown,
-  args: { staffId: string },
+  args: { userId: string },
   ctx: RatingsContext,
 ): Promise<gql.Rating[]> => {
-  const ratings = await ctx.ratingsService.getRatingsByStaff(args.staffId);
+  const ratings = await ctx.ratingsService.getRatingsByUser(args.userId);
 
   return ratings.map((rating) => ({
     ...rating,
@@ -47,7 +47,7 @@ const createRatingFn = async (
 
 export const resolver = {
   Query: {
-    getRatingsByStaff: getRatingsByStaffFn,
+    getRatingsByUser: getRatingsByUserFn,
   },
 
   Mutation: {

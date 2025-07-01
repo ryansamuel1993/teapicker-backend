@@ -1,32 +1,19 @@
-import { PrismaClient, Staff, Team as PrismaTeam } from "@prisma/client";
-import { Team } from "../../common/types";
+import { PrismaClient, User, Team as PrismaTeam } from "@prisma/client";
 import { DEFAULT_PREFERENCES } from "../../config/default";
-import { CreateTeamInput, UpdateTeam } from "../types";
+import { CreateTeamInput, Team, UpdateTeam } from "../types";
 
 export interface ITeamRepository {
-  getAll(): Promise<Team[]>;
-  create(team: CreateTeamInput): Promise<Team>;
-  update(id: string, data: Partial<Team>): Promise<Team>;
-  getTeamByStaffId(staffId: string): Promise<Team | undefined>;
-  delete(id: string): Promise<void>;
-}
-
-function mapTeam(
-  entity: PrismaTeam & {
-    members: Staff[];
-  },
-): Team {
-  return {
-    id: entity.id,
-    name: entity.name,
-    members: entity.members,
-  };
+  getAllTeams(): Promise<Team[]>;
+  createTeam(team: CreateTeamInput): Promise<Team>;
+  updateTeam(id: string, data: Partial<Team>): Promise<Team>;
+  getTeamByUserId(userId: string): Promise<Team | undefined>;
+  deleteTeam(id: string): Promise<void>;
 }
 
 export class TeamRepository implements ITeamRepository {
   constructor(private prisma: PrismaClient) {}
 
-  async getAll(): Promise<Team[]> {
+  async getAllTeams(): Promise<Team[]> {
     return this.prisma.team.findMany({
       include: {
         members: true,
@@ -34,11 +21,11 @@ export class TeamRepository implements ITeamRepository {
     });
   }
 
-  async getTeamByStaffId(staffId: string): Promise<Team | undefined> {
+  async getTeamByUserId(userId: string): Promise<Team | undefined> {
     const result = await this.prisma.team.findFirst({
       where: {
         members: {
-          some: { id: staffId },
+          some: { id: userId },
         },
       },
       include: {
@@ -46,17 +33,17 @@ export class TeamRepository implements ITeamRepository {
       },
     });
 
-    return result ? mapTeam(result) : undefined;
+    return result ?? undefined;
   }
 
-  async create(team: CreateTeamInput): Promise<Team> {
-    const { name, staff } = team;
+  async createTeam(team: CreateTeamInput): Promise<Team> {
+    const { name, user } = team;
 
-    const result = await this.prisma.team.create({
+    return await this.prisma.team.create({
       data: {
         name,
         members: {
-          create: (staff ?? []).map((member) => ({
+          create: (user ?? []).map((member) => ({
             name: member.name,
             email: member.email,
             contactNumber: member.contactNumber,
@@ -71,10 +58,9 @@ export class TeamRepository implements ITeamRepository {
       },
     });
 
-    return mapTeam(result);
   }
 
-  async update(id: string, updateTeam: UpdateTeam): Promise<Team> {
+  async updateTeam(id: string, updateTeam: UpdateTeam): Promise<Team> {
     return await this.prisma.team.update({
       where: { id },
       data: { name: updateTeam.name },
@@ -84,7 +70,7 @@ export class TeamRepository implements ITeamRepository {
     });
   }
 
-  async delete(id: string): Promise<void> {
+  async deleteTeam(id: string): Promise<void> {
     await this.prisma.team.delete({ where: { id } });
   }
 }
