@@ -1,0 +1,69 @@
+# --------------------- Types --------------------#
+
+type Item {
+  id: ID!
+  name: String!
+  price: Float!
+  isAvailable: Boolean!
+}
+
+type OrderItem {
+  id: ID!
+  item: Item!
+  quantity: Int!
+}
+
+enum OrderType {
+  INTERNAL
+  EXTERNAL
+}
+
+type Order {
+  id: ID!
+  staffId: String
+  teamId: String
+  items: [OrderItem!]!
+  notes: String
+  createdAt: String!
+  completed: Boolean
+  orderType: OrderType
+  ratings: [Rating]
+}
+
+# --------------------- Inputs --------------------#
+
+input OrderItemInput {
+  itemId: ID!
+  quantity: Int!
+}
+
+input CreateOrderInput {
+  orderType: OrderType
+  staffId: ID!
+  notes: String
+  items: [OrderItemInput!]!
+}
+
+
+# --------------------- Responses --------------------#
+
+type CreateOrderResponse {
+  status: ResponseStatus
+  data: Order
+}
+
+
+# --------------------- Queries --------------------#
+
+type Query {
+  order(id: ID!): Order
+  allOrders: [Order!]!
+  menu: [Item!]!
+}
+
+
+# --------------------- Mutations --------------------#
+
+type Mutation {
+  createOrder(input: CreateOrderInput!): CreateOrderResponse!
+}

@@ -1,0 +1,26 @@
+# --------------------- Types --------------------- #
+
+type Team {
+  id: ID!
+  name: String!
+  members: [Staff!]!
+}
+
+# --------------------- Inputs --------------------- #
+
+input CreateTeamInput {
+  name: String!
+  staff: [CreateStaffInput]
+}
+
+# --------------------- Queries --------------------- #
+
+type Query {
+  getAllTeams: [Team!]!
+}
+
+# --------------------- Mutations --------------------- #
+
+type Mutation {
+  createTeam(input: CreateTeamInput!): Team!
+}

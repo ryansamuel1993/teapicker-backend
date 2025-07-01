@@ -1,0 +1,70 @@
+# --------------------- Enums ---------------------
+
+enum DrinkType {
+  TEA
+  COFFEE
+  HERBALTEA
+  GREENTEA
+  HOTCHOCOLATE
+}
+
+enum SweetenerType {
+  SUGAR
+  SWEETENER
+  NONE
+}
+
+enum MilkStrength {
+  NONE
+  LIIGHT
+  MEDIUM
+  STRONG
+}
+
+# --------------------- Types ---------------------
+
+type Preferences {
+  id: ID!
+  staffId: ID!
+  drinkType: DrinkType!
+  sweetenerType: SweetenerType!
+  sugarAmount: Int!
+  milkStrength: MilkStrength!
+  notes: String
+}
+
+# --------------------- Inputs ---------------------
+
+input CreatePreferencesInput {
+  staffId: ID!
+  drinkType: DrinkType!
+  sweetenerType: SweetenerType!
+  sugarAmount: Int!
+  milkStrength: MilkStrength!
+  notes: String
+}
+
+# --------------------- Responses ---------------------
+
+type CreatePreferencesResponse {
+  status: ResponseStatus!
+  data: Preferences!
+}
+
+type UpdatePreferencesResponse {
+  status: ResponseStatus!
+  data: Preferences
+}
+
+# --------------------- Queries ---------------------
+
+type Query {
+  getPreferencesByStaff(staffId: ID!): Preferences
+}
+
+# --------------------- Mutations ---------------------
+
+type Mutation {
+  createPreferences(input: CreatePreferencesInput!): CreatePreferencesResponse!
+  updatePreferences(input: CreatePreferencesInput!): UpdatePreferencesResponse!
+}

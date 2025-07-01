@@ -1,0 +1,24 @@
+# --------------------- Types --------------------#
+type ResponseStatus {
+  errorMessage: String
+  status: String!
+  code: String
+}
+
+type Staff {
+  id: ID!
+}
+
+type Team {
+  id: ID!
+}
+
+scalar Date
+
+# --------------------- Inputs --------------------#
+
+# --------------------- Responses --------------------#
+
+# --------------------- Queries --------------------#
+
+# --------------------- Mutations --------------------#

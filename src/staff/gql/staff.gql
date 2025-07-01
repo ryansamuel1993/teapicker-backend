@@ -1,0 +1,53 @@
+# --------------------- Types --------------------#
+
+type Staff {
+  id: ID!
+  teamId: String
+  name: String!
+  email: String
+  contactNumber: Int
+}
+
+# --------------------- Inputs --------------------#
+
+input CreateStaffInput {
+  name: String!
+  teamId: String
+  email: String!
+  contactNumber: Int!
+}
+
+input UpdateStaffInput {
+  id: ID!
+  teamId: String!
+  name: String!
+  email: String!
+  contactNumber: Int!
+}
+
+# --------------------- Responses --------------------#
+
+type CreateStaffResponse {
+  status: ResponseStatus
+  data: [Staff!]
+}
+
+type UpdateStaffResponse {
+  status: ResponseStatus
+  data: Staff
+}
+
+
+# --------------------- Queries --------------------#
+
+type Query {
+  get(staffId: ID!): Staff
+  listAllStaff: [Staff!]!
+}
+
+# --------------------- Mutations --------------------#
+
+type Mutation {
+  createStaff(input: CreateStaffInput!): Staff!
+  updateStaff(input: UpdateStaffInput!): Staff!
+}

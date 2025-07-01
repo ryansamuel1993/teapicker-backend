@@ -1,0 +1,45 @@
+# --------------------- Types --------------------#
+
+enum Score {
+  Bad
+  Okay
+  Good
+  Excellent
+}
+
+type Rating {
+  id: ID!
+  score: Score
+  comment: String
+  createdAt: String!
+  staffId: ID!
+}
+
+# --------------------- Inputs --------------------#
+
+input CreateRatingInput {
+  staffId: String!
+  orderId: String!
+  score: Score!
+  comment: String
+}
+
+# --------------------- Responses --------------------#
+
+type CreateRatingResponse {
+  status: ResponseStatus
+  data: Rating
+}
+
+# --------------------- Queries --------------------#
+
+type Query {
+  getRatingsByStaff(staffId: ID!): [Rating!]!
+  getRatingById(id: ID!): Rating
+}
+
+# --------------------- Mutations --------------------#
+
+type Mutation {
+  createRating(input: CreateRatingInput!): Rating!
+}

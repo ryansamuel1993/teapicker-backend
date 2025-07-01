@@ -1,0 +1,138 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+enum DrinkType {
+  TEA
+  COFFEE
+  HERBALTEA
+  GREENTEA
+  HOTCHOCOLATE
+}
+
+enum SweetenerType {
+  NONE
+  SUGAR
+  SWEETENER
+}
+
+enum MilkStrength {
+  NONE
+  LIGHT
+  MEDIUM
+  STRONG
+}
+
+enum OrderType {
+  INTERNAL
+  EXTERNAL
+}
+
+enum Score {
+  Bad
+  Okay
+  Good
+  Excellent
+}
+
+model Staff {
+  id            String         @id @default(uuid())
+  name          String
+  email         String
+  contactNumber Int
+  teamId        String
+  team          Team           @relation(fields: [teamId], references: [id])
+  boostUsages   BoostUsage[]
+  orders        Order[]
+  preferences   Preferences?
+  ratings       Rating[]
+}
+
+model Team {
+  id      String   @id @default(uuid())
+  name    String
+  orders  Order[]  @relation("TeamToOrder")
+  members Staff[]
+}
+
+model Preferences {
+  id            String         @id @default(uuid())
+  staffId       String         @unique
+  drinkType     DrinkType
+  sweetenerType SweetenerType
+  sugarAmount   Int
+  milkStrength  MilkStrength
+  notes         String?
+  staff         Staff          @relation(fields: [staffId], references: [id])
+}
+
+model Boost {
+  id          String       @id @default(uuid())
+  boost       String
+  cooldown    Int?
+  notes       String?
+  boostUsages BoostUsage[]
+}
+
+model BoostUsage {
+  id        String  @id @default(uuid())
+  staffId   String
+  boostId   String
+  remaining Int
+  notes     String?
+  staff     Staff   @relation(fields: [staffId], references: [id])
+  boost     Boost   @relation(fields: [boostId], references: [id])
+}
+
+model Rating {
+  id        String    @id @default(uuid())
+  staffId   String
+  orderId   String
+  score     Score
+  notes     String?
+  createdAt DateTime  @default(now())
+
+  order     Order     @relation(fields: [orderId], references: [id])
+  staff     Staff     @relation(fields: [staffId], references: [id])
+
+  @@unique([staffId, orderId])
+}
+
+model Order {
+  id          String      @id @default(uuid())
+  staffId     String
+  teamId      String
+  notes       String?
+  createdAt   DateTime    @default(now())
+  completed   Boolean     @default(false)
+  orderType   OrderType   @default(INTERNAL)
+
+  staff       Staff       @relation(fields: [staffId], references: [id])
+  team        Team        @relation("TeamToOrder", fields: [teamId], references: [id])
+  items       OrderItem[]
+  ratings     Rating[]
+}
+
+model Item {
+  id          String      @id @default(uuid())
+  name        String
+  price       Float
+  isAvailable Boolean     @default(true)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  orderItems  OrderItem[]
+}
+
+model OrderItem {
+  id       String @id @default(uuid())
+  quantity Int
+  itemId   String
+  orderId  String
+  item     Item   @relation(fields: [itemId], references: [id])
+  order    Order  @relation(fields: [orderId], references: [id])
+}
