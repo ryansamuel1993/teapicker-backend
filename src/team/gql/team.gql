@@ -16,7 +16,7 @@ input CreateTeamInput {
 # --------------------- Queries --------------------- #
 
 type Query {
-  getAllTeamss: [Team]
+  getAllTeams: [Team]
 }
 
 # --------------------- Mutations --------------------- #

@@ -1,18 +1,18 @@
-import { IRatingsRepository } from "../repository/repository";
+import { IRatingRepository } from "../repository/repository";
 import { CreateRatingInput, Rating } from "../types";
 
-export interface IRatingsService {
+export interface IRatingService {
   createRating(input: CreateRatingInput): Promise<Rating | undefined>;
   getRatingsByUser(userId: string): Promise<Rating[]>;
 }
 
-export class RatingsService implements IRatingsService {
-  constructor(private ratingsRepository: IRatingsRepository) {}
+export class RatingService implements IRatingService {
+  constructor(private ratingRepository: IRatingRepository) {}
 
   createRating(input: CreateRatingInput): Promise<Rating | undefined> {
-    return this.ratingsRepository.create(input);
+    return this.ratingRepository.createRating(input);
   }
   getRatingsByUser(userId: string): Promise<Rating[]> {
-    return this.ratingsRepository.get(userId);
+    return this.ratingRepository.getUserRatings(userId);
   }
 }

@@ -60,6 +60,7 @@ export default [
       },
     },
     rules: {
+      "prettier/prettier": ["error"],
       curly: ["error", "all"],
       eqeqeq: ["error", "smart"],
       "no-void": ["error", { allowAsStatement: true }],
@@ -90,8 +91,6 @@ export default [
           memberSyntaxSortOrder: ["none", "all", "multiple", "single"],
         },
       ],
-      "simple-import-sort/imports": "error",
-      "simple-import-sort/exports": "error",
 
       "padding-line-between-statements": [
         "error",
@@ -125,7 +124,6 @@ export default [
     plugins: {
       "@typescript-eslint": tsPlugin,
       import: importPlugin,
-      "simple-import-sort": sortPlugin,
       "jsx-a11y": jsxA11yPlugin,
       "eslint-comments": commentsPlugin,
     },
@@ -140,8 +138,6 @@ export default [
         "never",
         { json: "always", svg: "always", css: "always" },
       ],
-      "simple-import-sort/imports": "error",
-      "simple-import-sort/exports": "error",
       "padding-line-between-statements": [
         "error",
         {

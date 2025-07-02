@@ -3,11 +3,11 @@ import { formatDate } from "../../utils/format";
 import {
   createBadRequestStatus,
   createSuccessStatus,
-} from "../../utils/responseUtils";
-import { IRatingsService } from "../service/service";
+} from "../../utils/response";
+import { IRatingService } from "../service/service";
 
 export type RatingsContext = {
-  ratingsService: IRatingsService;
+  ratingsService: IRatingService;
 };
 
 const getRatingsByUserFn = async (

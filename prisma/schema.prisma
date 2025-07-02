@@ -33,25 +33,30 @@ enum OrderType {
   EXTERNAL
 }
 
-enum Score {
-  Bad
-  Okay
-  Good
-  Excellent
-}
-
 model User {
   id            String         @id @default(uuid())
   name          String
-  email         String
-  contactNumber Int
-  teamId        String
-  team          Team           @relation(fields: [teamId], references: [id])
+  email         String?
+  contactNumber BigInt?
+  teamId        String?
+  team          Team?          @relation(fields: [teamId], references: [id])
   boostUsages   BoostUsage[]
   orders        Order[]
   preferences   Preferences?
   ratings       Rating[]
+  media         UserMedia[]
 }
+
+model UserMedia {
+  id        String   @id @default(uuid())
+  userId    String
+  url       String
+  type      String
+  alt       String?
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+}
+
 
 model Team {
   id      String   @id @default(uuid())
@@ -94,11 +99,11 @@ model Rating {
   id        String    @id @default(uuid())
   userId   String
   orderId   String
-  quality   Score
-  service   Score
-  overall   Score
+  quality   Int
+  service   Int
+  overall   Int
   notes     String?
-  voiceNote      Bytes
+  voiceNote      Bytes?
   createdAt DateTime  @default(now())
 
   order     Order     @relation(fields: [orderId], references: [id])

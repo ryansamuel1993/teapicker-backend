@@ -2,5 +2,6 @@ module.exports = {
   bracketSameLine: false,
   singleQuote: true,
   trailingComma: "all",
+  endOfLine: "auto",
   parser: "typescript",
 };

@@ -1,49 +1,30 @@
 import { PrismaClient } from "@prisma/client";
-import { Rating, CreateRatingInput } from "../types";
-import { Score } from "../gql/rating-gen.gql";
+import { Rating, ratingSchema } from "../types";
+import { mapCreateInputToPrisma, mapRatingResult } from "../../utils/rating";
 
-export interface IRatingsRepository {
-  create(input: CreateRatingInput): Promise<Rating | undefined>;
-  get(userId: string): Promise<Rating[]>;
+export interface IRatingRepository {
+  createRating(input: unknown): Promise<Rating>;
+  getUserRatings(userId: string): Promise<Rating[]>;
 }
 
-export class RatingsRepository implements IRatingsRepository {
-  constructor(private prisma: PrismaClient) {}
+export class RatingRepository implements IRatingRepository {
+  constructor(private readonly prisma: PrismaClient) {}
 
-  async create(input: CreateRatingInput): Promise<Rating> {
-    const result = await this.prisma.rating.create({
-      data: {
-        orderId: input.orderId,
-        score: input.score,
-        notes: input.notes,
-        userId: input.userId,
-      },
-      include: {
-        user: true,
-      },
-    });
+  async createRating(input: unknown): Promise<Rating> {
+    const parsed = ratingSchema.parse(input);
 
-    return {
-      id: result.id,
-      score: result.score as Score,
-      notes: result.notes ?? undefined,
-      createdAt: result.createdAt,
-      userId: result.userId,
-    };
+    const data = mapCreateInputToPrisma(parsed);
+    const result = await this.prisma.rating.create({ data });
+
+    return mapRatingResult(result);
   }
 
-  async get(userId: string): Promise<Rating[]> {
+  async getUserRatings(userId: string): Promise<Rating[]> {
     const results = await this.prisma.rating.findMany({
       where: { userId },
-      include: { user: true },
+      orderBy: { createdAt: "desc" },
     });
 
-    return results.map((result) => ({
-      id: result.id,
-      score: result.score as Score,
-      notes: result.notes ?? undefined,
-      createdAt: result.createdAt,
-      userId: result.userId,
-    }));
+    return results.map(mapRatingResult);
   }
 }

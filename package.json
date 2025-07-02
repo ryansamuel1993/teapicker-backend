@@ -6,7 +6,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint . --ext .js,.ts",
     "lint:fix": "npm run lint -- --fix",
-    "dev": "ts-node-dev src/index.ts",
+    "dev": "ts-node -r tsconfig-paths/register src/index.ts",
     "prisma:generate": "npx prisma generate",
     "prisma:seed": "ts-node prisma/seed.ts",
     "prisma:gen-seed": "npx prisma generate && npx prisma migrate dev && npm run prisma:seed",
@@ -48,6 +48,8 @@
     "@types/commander": "^2.12.0",
     "apollo-server": "^3.13.0",
     "commander": "^14.0.0",
-    "prisma": "^6.10.1"
+    "prisma": "^6.10.1",
+    "tsconfig-paths": "^4.2.0",
+    "zod": "^3.25.67"
   }
 }

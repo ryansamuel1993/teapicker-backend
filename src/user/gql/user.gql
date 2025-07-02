@@ -5,7 +5,7 @@ type User {
   teamId: String
   name: String!
   email: String
-  contactNumber: Int
+  contactNumber: BigInt
 }
 
 # --------------------- Inputs --------------------#
@@ -14,15 +14,16 @@ input CreateUserInput {
   name: String!
   teamId: String
   email: String
-  contactNumber: Int
+  contactNumber: BigInt
 }
 
 input UpdateUserInput {
   id: ID!
   teamId: String
-  name: String
+  name: String!
   email: String
-  contactNumber: Int
+  contactNumber: BigInt
+  mediaId: ID
 }
 
 # --------------------- Responses --------------------#
@@ -37,11 +38,10 @@ type UpdateUserResponse {
   data: User
 }
 
-
 # --------------------- Queries --------------------#
 
 type Query {
-  get(userId: ID): User
+  getUserById(userId: ID): User
   getAllUsers: [User]
 }
 

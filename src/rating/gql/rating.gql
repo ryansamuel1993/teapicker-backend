@@ -1,17 +1,12 @@
 # --------------------- Types --------------------#
 
-enum Score {
-  Bad
-  Okay
-  Good
-  Excellent
-}
-
 type Rating {
   id: ID!
-  score: Score
   comment: String
   createdAt: String!
+  service: Int
+  quality: Int
+  overall: Int
   userId: ID!
 }
 
@@ -20,7 +15,8 @@ type Rating {
 input CreateRatingInput {
   userId: String!
   orderId: String!
-  score: Score!
+  service: Int!
+  quality: Int!
   comment: String
 }
 

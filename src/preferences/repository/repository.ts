@@ -13,7 +13,7 @@ import {
 export interface IPreferencesRepository {
   createPreferences(input: CreatePreferencesInput): Promise<Preferences>;
   updatePreferences(input: CreatePreferencesInput): Promise<Preferences>;
-  getPreferences(userId: string): Promise<Preferences | undefined>;
+  getUserPreferences(userId: string): Promise<Preferences | undefined>;
 }
 
 export class PreferencesRepository implements IPreferencesRepository {
@@ -69,7 +69,7 @@ export class PreferencesRepository implements IPreferencesRepository {
     return this.fromPrisma(result);
   }
 
-  async getPreferences(userId: string): Promise<Preferences | undefined> {
+  async getUserPreferences(userId: string): Promise<Preferences | undefined> {
     const result = await this.prisma.preferences.findUnique({
       where: { userId },
       include: { user: true },

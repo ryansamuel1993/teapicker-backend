@@ -6,7 +6,7 @@ import {
 } from "../types";
 
 export interface IPreferencesService {
-  getPreferences(userId: string): Promise<Preferences | undefined>;
+  getUserPreferences(userId: string): Promise<Preferences | undefined>;
   createPreferences(input: CreatePreferencesInput): Promise<Preferences>;
   updatePreferences(input: CreatePreferencesInput): Promise<Preferences>;
 }
@@ -14,8 +14,8 @@ export interface IPreferencesService {
 export class PreferencesService implements IPreferencesService {
   constructor(private preferencesRepository: IPreferencesRepository) {}
 
-  async getPreferences(userId: string): Promise<Preferences | undefined> {
-    return await this.preferencesRepository.getPreferences(userId);
+  async getUserPreferences(userId: string): Promise<Preferences | undefined> {
+    return await this.preferencesRepository.getUserPreferences(userId);
   }
 
   async createPreferences(input: CreatePreferencesInput): Promise<Preferences> {

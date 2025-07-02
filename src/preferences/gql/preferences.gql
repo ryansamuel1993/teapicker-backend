@@ -48,7 +48,7 @@ input CreatePreferencesInput {
 
 type CreatePreferencesResponse {
   status: ResponseStatus!
-  data: Preferences!
+  data: Preferences
 }
 
 type UpdatePreferencesResponse {
@@ -59,7 +59,7 @@ type UpdatePreferencesResponse {
 # --------------------- Queries ---------------------
 
 type Query {
-  getPreferencesByUser(userId: ID!): Preferences
+  getUserPreferences(userId: ID!): Preferences
 }
 
 # --------------------- Mutations ---------------------

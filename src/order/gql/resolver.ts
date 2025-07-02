@@ -10,15 +10,15 @@ const getOrder = async (
   args: { input: gql.Order },
   ctx: OrderContext,
 ) => {
-  return ctx.orderService.getOrderById(args.input.id);
+  return await ctx.orderService.getOrderById(args.input.id);
 };
 
 const getAllOrders = async (
   _parent: unknown,
-  args: { input: gql.Order },
+  _: { input: gql.Order },
   ctx: OrderContext,
 ) => {
-  return ctx.orderService.getAllOrders();
+  return await ctx.orderService.getAllOrders();
 };
 
 const createOrder = async (
@@ -26,13 +26,13 @@ const createOrder = async (
   args: { input: gql.CreateOrderInput },
   ctx: OrderContext,
 ) => {
-  return ctx.orderService.createOrder(args.input);
+  return await ctx.orderService.createOrder(args.input);
 };
 
 export const resolver = {
   Query: {
-    order: getOrder,
-    allOrders: getAllOrders,
+    getOrder: getOrder,
+    getAllOrders: getAllOrders,
   },
   Mutation: {
     createOrder,

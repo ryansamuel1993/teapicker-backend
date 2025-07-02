@@ -5,13 +5,15 @@ interface TeamContext {
   teamService: ITeamService;
 }
 
-/** Query handlers */
-const getAllTeamss = async (
+const getAllTeams = async (
   _parent: unknown,
   _args: unknown,
   ctx: TeamContext,
 ) => {
-  return ctx.teamService.getAllTeamss();
+  const t = await ctx.teamService.getAllTeams();
+  console.log(t);
+
+  return await ctx.teamService.getAllTeams();
 };
 
 const createTeam = async (
@@ -21,12 +23,12 @@ const createTeam = async (
 ) => {
   const { name, user } = args.input;
 
-  return ctx.teamService.createTeam({ name, user });
+  return await ctx.teamService.createTeam({ name, user });
 };
 
 export const resolver = {
   Query: {
-    getAllTeamss: getAllTeamss,
+    getAllTeams: getAllTeams,
   },
   Mutation: {
     createTeam,

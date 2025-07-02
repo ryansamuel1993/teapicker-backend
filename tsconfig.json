@@ -1,5 +1,10 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@service/*": ["src/service/*"],
+      "@gql/*": ["src/service/gql/*"],
+    },
     "rootDirs": ["src"],
     "outDir": "dist",
     "lib": ["es2020"],
@@ -12,7 +17,7 @@
     "strictNullChecks": true,
     "skipLibCheck": true,
     "sourceMap": true,
-    "forceConsistentCasingInFileNames": true,
+    "forceConsistentCasingInFileNames": true
   },
   "exclude": ["node_modules", "migrations", "e2e", "localstack"]
 }

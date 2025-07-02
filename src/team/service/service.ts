@@ -3,7 +3,7 @@ import { Team } from "../types";
 import { CreateTeamInput } from "../types";
 
 export interface ITeamService {
-  getAllTeamss(): Promise<Team[]>;
+  getAllTeams(): Promise<Team[]>;
   createTeam(input: CreateTeamInput): Promise<Team>;
   updateTeam(id: string, data: Partial<Team>): Promise<Team>;
   deleteTeam(id: string): Promise<void>;
@@ -12,7 +12,7 @@ export interface ITeamService {
 export class TeamService implements ITeamService {
   constructor(private teamRepository: ITeamRepository) {}
 
-  getAllTeamss(): Promise<Team[]> {
+  getAllTeams(): Promise<Team[]> {
     return this.teamRepository.getAllTeams();
   }
 

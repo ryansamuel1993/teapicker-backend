@@ -1,4 +1,4 @@
-import { PrismaClient, User, Team as PrismaTeam } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 import { DEFAULT_PREFERENCES } from "../../config/default";
 import { CreateTeamInput, Team, UpdateTeam } from "../types";
 
@@ -57,7 +57,6 @@ export class TeamRepository implements ITeamRepository {
         members: true,
       },
     });
-
   }
 
   async updateTeam(id: string, updateTeam: UpdateTeam): Promise<Team> {

@@ -1,30 +1,30 @@
-import { User } from "@prisma/client";
-
+import { UpdateUserInput } from "../gql/user-gen.gql";
 import { IUserRepository } from "../repository/repository";
+import { CreateUserInput, User } from "../types";
 
 export interface IUserService {
-  get(id: string): Promise<User | undefined>;
-  getAllUser(): Promise<User[]>;
+  getUserById(id: string): Promise<User | undefined>;
+  getAllUsers(): Promise<User[]>;
   createUser(input: Partial<User>): Promise<User>;
-  updateUser(input: User): Promise<User>;
+  updateUser(input: UpdateUserInput): Promise<User>;
 }
 
 export class UserService implements IUserService {
   constructor(private userRepository: IUserRepository) {}
 
-  async get(id: string): Promise<User | undefined> {
-    return this.userRepository.findById(id);
+  async getUserById(id: string): Promise<User | undefined> {
+    return this.userRepository.getUserById(id);
   }
 
-  async getAllUser(): Promise<User[]> {
-    return this.userRepository.findAll();
+  async getAllUsers(): Promise<User[]> {
+    return this.userRepository.getAllUsers();
   }
 
-  async createUser(input: Partial<User>): Promise<User> {
-    return this.userRepository.create(input);
+  async createUser(input: CreateUserInput): Promise<User> {
+    return this.userRepository.createUser(input);
   }
 
-  async updateUser(input: Partial<User> & { id: string }): Promise<User> {
-    return this.userRepository.update(input.id, input);
+  async updateUser(input: UpdateUserInput): Promise<User> {
+    return this.userRepository.updateUser(input);
   }
 }
