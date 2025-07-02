@@ -13,18 +13,18 @@ export class UserService implements IUserService {
   constructor(private userRepository: IUserRepository) {}
 
   async getUserById(id: string): Promise<User | undefined> {
-    return this.userRepository.getUserById(id);
+    return await this.userRepository.getUserById(id);
   }
 
   async getAllUsers(): Promise<User[]> {
-    return this.userRepository.getAllUsers();
+    return await this.userRepository.getAllUsers();
   }
 
   async createUser(input: CreateUserInput): Promise<User> {
-    return this.userRepository.createUser(input);
+    return await this.userRepository.createUser(input);
   }
 
   async updateUser(input: UpdateUserInput): Promise<User> {
-    return this.userRepository.updateUser(input);
+    return await this.userRepository.updateUser(input);
   }
 }

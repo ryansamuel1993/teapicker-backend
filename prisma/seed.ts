@@ -8,8 +8,8 @@ async function seed() {
   await prisma.rating.deleteMany();
   await prisma.orderItem.deleteMany();
   await prisma.order.deleteMany();
-  await prisma.boost?.deleteMany?.();
   await prisma.boostUsage.deleteMany();
+  await prisma.boost?.deleteMany?.();
   await prisma.boost.deleteMany();
   await prisma.preferences.deleteMany();
   await prisma.item.deleteMany();
@@ -124,9 +124,9 @@ async function seed() {
       data: {
         userId: user.id,
         orderId: order.id,
-        quality: faker.helpers.arrayElement(Object.values(1)),
-        service: faker.helpers.arrayElement(Object.values(2)),
-        overall: faker.helpers.arrayElement(Object.values(1.5)),
+        quality: faker.number.int({ min: 1, max: 5 }),
+        service: faker.number.int({ min: 1, max: 5 }),
+        overall: faker.number.int({ min: 1, max: 5 }),
         voiceNote: Buffer.from(faker.lorem.words(2), 'utf-8'),
         notes: faker.lorem.words(3),
       },

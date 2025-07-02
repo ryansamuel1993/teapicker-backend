@@ -12,19 +12,19 @@ export interface ITeamService {
 export class TeamService implements ITeamService {
   constructor(private teamRepository: ITeamRepository) {}
 
-  getAllTeams(): Promise<Team[]> {
-    return this.teamRepository.getAllTeams();
+  async getAllTeams(): Promise<Team[]> {
+    return await this.teamRepository.getAllTeams();
   }
 
-  createTeam(input: CreateTeamInput): Promise<Team> {
-    return this.teamRepository.createTeam(input);
+  async createTeam(input: CreateTeamInput): Promise<Team> {
+    return await this.teamRepository.createTeam(input);
   }
 
-  updateTeam(id: string, data: Partial<Team>): Promise<Team> {
-    return this.teamRepository.updateTeam(id, data);
+  async updateTeam(id: string, data: Partial<Team>): Promise<Team> {
+    return await this.teamRepository.updateTeam(id, data);
   }
 
-  deleteTeam(id: string): Promise<void> {
-    return this.teamRepository.deleteTeam(id);
+  async deleteTeam(id: string): Promise<void> {
+    return await this.teamRepository.deleteTeam(id);
   }
 }

@@ -6,6 +6,16 @@ type User {
   name: String!
   email: String
   contactNumber: BigInt
+  media: [UserMedia!]!
+}
+
+type UserMedia {
+  id: ID!
+  userId: ID!
+  url: String!
+  type: String
+  alt: String
+  createdAt: Date
 }
 
 # --------------------- Inputs --------------------#

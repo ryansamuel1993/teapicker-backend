@@ -19,7 +19,7 @@ export class PreferencesService implements IPreferencesService {
   }
 
   async createPreferences(input: CreatePreferencesInput): Promise<Preferences> {
-    return this.preferencesRepository.createPreferences(input);
+    return await this.preferencesRepository.createPreferences(input);
   }
 
   async updatePreferences(input: UpdatePreferencesInput): Promise<Preferences> {

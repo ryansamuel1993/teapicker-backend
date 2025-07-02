@@ -9,10 +9,10 @@ export interface IRatingService {
 export class RatingService implements IRatingService {
   constructor(private ratingRepository: IRatingRepository) {}
 
-  createRating(input: CreateRatingInput): Promise<Rating | undefined> {
-    return this.ratingRepository.createRating(input);
+  async createRating(input: CreateRatingInput): Promise<Rating | undefined> {
+    return await this.ratingRepository.createRating(input);
   }
-  getRatingsByUser(userId: string): Promise<Rating[]> {
-    return this.ratingRepository.getUserRatings(userId);
+  async getRatingsByUser(userId: string): Promise<Rating[]> {
+    return await this.ratingRepository.getUserRatings(userId);
   }
 }

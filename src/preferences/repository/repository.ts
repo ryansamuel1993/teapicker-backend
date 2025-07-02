@@ -56,7 +56,7 @@ export class PreferencesRepository implements IPreferencesRepository {
       include: { user: true },
     });
 
-    return this.fromPrisma(result);
+    return await this.fromPrisma(result);
   }
 
   async updatePreferences(input: UpdatePreferencesInput): Promise<Preferences> {
@@ -66,7 +66,7 @@ export class PreferencesRepository implements IPreferencesRepository {
       include: { user: true },
     });
 
-    return this.fromPrisma(result);
+    return await this.fromPrisma(result);
   }
 
   async getUserPreferences(userId: string): Promise<Preferences | undefined> {

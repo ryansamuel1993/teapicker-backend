@@ -85,14 +85,14 @@ export class OrderRepository implements IOrderRepository {
   }
 
   async getMenu(): Promise<Item[]> {
-    return this.prisma.item.findMany({
+    return await this.prisma.item.findMany({
       where: { isAvailable: true },
       orderBy: { name: "asc" },
     });
   }
 
   async getItemsByIds(itemIds: string[]): Promise<Item[]> {
-    return this.prisma.item.findMany({
+    return await this.prisma.item.findMany({
       where: {
         id: { in: itemIds },
       },

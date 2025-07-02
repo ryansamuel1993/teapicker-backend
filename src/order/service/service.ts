@@ -25,6 +25,6 @@ export class OrderService implements IOrderService {
   }
 
   async createOrder(input: CreateOrderInput): Promise<Order> {
-    return this.orderRepository.createOrder(input);
+    return await this.orderRepository.createOrder(input);
   }
 }
