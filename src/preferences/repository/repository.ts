@@ -9,6 +9,7 @@ import {
   SweetenerType,
   MilkStrength,
 } from "../gql/preferences-gen.gql";
+import { convertNullToUndefined } from "../../utils/map";
 
 export interface IPreferencesRepository {
   createPreferences(input: CreatePreferencesInput): Promise<Preferences>;
@@ -24,26 +25,28 @@ export class PreferencesRepository implements IPreferencesRepository {
       userId: input.userId,
       drinkType: input.drinkType as $Enums.DrinkType,
       sweetenerType: input.sweetenerType as $Enums.SweetenerType,
-      sugarAmount: input.sugarAmount,
+      sugarAmount: input.sugarAmount ?? 0,
       milkStrength: input.milkStrength as $Enums.MilkStrength,
       notes: input.notes,
     };
   }
 
-  private fromPrisma(result: {
+  private fromPrisma(input: {
     id: string;
     userId: string;
     drinkType: $Enums.DrinkType;
-    sweetenerType: $Enums.SweetenerType;
-    sugarAmount: number;
-    milkStrength: $Enums.MilkStrength;
+    sweetenerType: $Enums.SweetenerType | null;
+    sugarAmount: number | null;
+    milkStrength: $Enums.MilkStrength | null;
     notes?: string | null;
   }): Preferences {
+    const result = convertNullToUndefined(input);
+
     return {
       id: result.id,
       userId: result.userId,
-      drinkType: result.drinkType as DrinkType,
-      sweetenerType: result.sweetenerType as SweetenerType,
+      drinkType: input.drinkType as DrinkType,
+      sweetenerType: input.sweetenerType as SweetenerType,
       sugarAmount: result.sugarAmount,
       milkStrength: result.milkStrength as MilkStrength,
       notes: result.notes ?? undefined,
@@ -56,7 +59,7 @@ export class PreferencesRepository implements IPreferencesRepository {
       include: { user: true },
     });
 
-    return await this.fromPrisma(result);
+    return this.fromPrisma(result);
   }
 
   async updatePreferences(input: UpdatePreferencesInput): Promise<Preferences> {
@@ -66,7 +69,7 @@ export class PreferencesRepository implements IPreferencesRepository {
       include: { user: true },
     });
 
-    return await this.fromPrisma(result);
+    return this.fromPrisma(result);
   }
 
   async getUserPreferences(userId: string): Promise<Preferences | undefined> {

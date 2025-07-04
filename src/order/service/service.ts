@@ -15,10 +15,10 @@ export class OrderService implements IOrderService {
   }
 
   async getAllOrders(): Promise<Order[]> {
-    const response = await this.orderRepository.getAllOrders();
+    const result = await this.orderRepository.getAllOrders();
 
-    if (response) {
-      return response;
+    if (result) {
+      return result;
     }
 
     throw new Error("No orders found");

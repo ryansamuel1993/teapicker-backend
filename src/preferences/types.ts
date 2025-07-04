@@ -19,8 +19,8 @@ export type Preferences = {
   id: string;
   userId: string;
   drinkType: DrinkType;
-  sweetenerType: SweetenerType;
-  sugarAmount: number;
-  milkStrength: MilkStrength;
+  sweetenerType?: SweetenerType;
+  sugarAmount?: number;
+  milkStrength?: MilkStrength;
   notes?: string;
 };

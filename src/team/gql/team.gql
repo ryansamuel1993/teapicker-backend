@@ -10,7 +10,12 @@ type Team {
 
 input CreateTeamInput {
   name: String!
-  user: [CreateUserInput]
+  members: [CreateUserInput]
+}
+
+type CreateTeamResponse {
+  status: ResponseStatus
+  data: Team
 }
 
 # --------------------- Queries --------------------- #
@@ -22,5 +27,5 @@ type Query {
 # --------------------- Mutations --------------------- #
 
 type Mutation {
-  createTeam(input: CreateTeamInput!): Team!
+  createTeam(input: CreateTeamInput!): CreateTeamResponse
 }

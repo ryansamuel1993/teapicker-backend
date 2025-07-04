@@ -14,13 +14,13 @@ export class TeamRepository implements ITeamRepository {
   constructor(private prisma: PrismaClient) {}
 
   async getAllTeams(): Promise<Team[]> {
-    const response = await this.prisma.team.findMany({
+    const result = await this.prisma.team.findMany({
       include: {
         members: true,
       },
     });
 
-    return response;
+    return result;
   }
 
   async getTeamByUserId(userId: string): Promise<Team | undefined> {
@@ -39,13 +39,13 @@ export class TeamRepository implements ITeamRepository {
   }
 
   async createTeam(team: CreateTeamInput): Promise<Team> {
-    const { name, user } = team;
+    const { name, users } = team;
 
     return await this.prisma.team.create({
       data: {
         name,
         members: {
-          create: (user ?? []).map((member) => ({
+          create: (users ?? []).map((member) => ({
             name: member.name,
             email: member.email,
             contactNumber: member.contactNumber,

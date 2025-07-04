@@ -27,9 +27,9 @@ type Preferences {
   id: ID!
   userId: ID!
   drinkType: DrinkType!
-  sweetenerType: SweetenerType!
-  sugarAmount: Int!
-  milkStrength: MilkStrength!
+  sweetenerType: SweetenerType
+  sugarAmount: Int
+  milkStrength: MilkStrength
   notes: String
 }
 
@@ -65,6 +65,6 @@ type Query {
 # --------------------- Mutations ---------------------
 
 type Mutation {
-  createPreferences(input: CreatePreferencesInput!): CreatePreferencesResponse!
-  updatePreferences(input: CreatePreferencesInput!): UpdatePreferencesResponse!
+  createPreferences(input: CreatePreferencesInput): CreatePreferencesResponse
+  updatePreferences(input: CreatePreferencesInput): UpdatePreferencesResponse
 }

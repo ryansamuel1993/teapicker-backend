@@ -6,5 +6,5 @@ export type UpdateTeam = Pick<Team, "id" | "name">;
 
 export type CreateTeamInput = {
   name: string;
-  user?: CreateUserInput[];
+  users?: CreateUserInput[];
 };

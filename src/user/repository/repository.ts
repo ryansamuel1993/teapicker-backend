@@ -1,7 +1,6 @@
-import { PrismaClient } from "@prisma/client";
+import { MediaType, PrismaClient } from "@prisma/client";
 import { CreateUserInput, UpdateUserInput, User } from "../types";
-import { convertNullToUndefined } from "../../utils/map";
-import { generateRandomAvatarUrl } from "../../utils/user";
+import { generateRandomAvatarUrl, mapUserFromPrisma } from "../../utils/user";
 
 export interface IUserRepository {
   createUser(data: CreateUserInput): Promise<User>;
@@ -13,12 +12,8 @@ export interface IUserRepository {
 export class UserRepository implements IUserRepository {
   constructor(private prisma: PrismaClient) {}
 
-  async createUser({
-    name,
-    email,
-    contactNumber,
-    teamId,
-  }: CreateUserInput): Promise<User> {
+  async createUser(user: CreateUserInput): Promise<User> {
+    const { name, email, contactNumber, teamId } = user;
     const avatarUrl = generateRandomAvatarUrl();
 
     const result = await this.prisma.user.create({
@@ -30,7 +25,7 @@ export class UserRepository implements IUserRepository {
         media: {
           create: {
             url: avatarUrl,
-            type: "avatar",
+            type: MediaType.AVATAR,
           },
         },
       },
@@ -39,7 +34,7 @@ export class UserRepository implements IUserRepository {
       },
     });
 
-    return convertNullToUndefined(result);
+    return mapUserFromPrisma(result);
   }
 
   async updateUser(user: UpdateUserInput): Promise<User> {
@@ -53,7 +48,7 @@ export class UserRepository implements IUserRepository {
       },
     });
 
-    return convertNullToUndefined(result);
+    return mapUserFromPrisma(result);
   }
 
   async getUserById(id: string): Promise<User | undefined> {
@@ -64,11 +59,7 @@ export class UserRepository implements IUserRepository {
       },
     });
 
-    if (result) {
-      return convertNullToUndefined(result);
-    }
-
-    return undefined;
+    return result ? mapUserFromPrisma(result) : undefined;
   }
 
   async getAllUsers(): Promise<User[]> {
@@ -78,8 +69,6 @@ export class UserRepository implements IUserRepository {
       },
     });
 
-    return result.map((user) => ({
-      ...convertNullToUndefined(user),
-    }));
+    return result.map((user) => mapUserFromPrisma(user));
   }
 }

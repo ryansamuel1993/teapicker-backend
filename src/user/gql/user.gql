@@ -5,15 +5,22 @@ type User {
   teamId: String
   name: String!
   email: String
-  contactNumber: BigInt
-  media: [UserMedia!]!
+  contactNumber: String
+  media: [UserMedia]
+}
+
+enum MediaType {
+  AVATAR
+  COVER
+  GALLERY
+  VIDEO
 }
 
 type UserMedia {
   id: ID!
   userId: ID!
   url: String!
-  type: String
+  type: MediaType!
   alt: String
   createdAt: Date
 }
@@ -24,7 +31,12 @@ input CreateUserInput {
   name: String!
   teamId: String
   email: String
-  contactNumber: BigInt
+  contactNumber: String
+}
+
+input CheckUserExistsInput {
+  name: String
+  email: String
 }
 
 input UpdateUserInput {
@@ -32,7 +44,7 @@ input UpdateUserInput {
   teamId: String
   name: String!
   email: String
-  contactNumber: BigInt
+  contactNumber: String
   mediaId: ID
 }
 
@@ -40,7 +52,7 @@ input UpdateUserInput {
 
 type CreateUserResponse {
   status: ResponseStatus
-  data: [User]
+  data: User
 }
 
 type UpdateUserResponse {
@@ -58,6 +70,6 @@ type Query {
 # --------------------- Mutations --------------------#
 
 type Mutation {
-  createUser(input: CreateUserInput): User
-  updateUser(input: UpdateUserInput): User
+  createUser(input: CreateUserInput!): CreateUserResponse!
+  updateUser(input: UpdateUserInput): UpdateUserResponse
 }

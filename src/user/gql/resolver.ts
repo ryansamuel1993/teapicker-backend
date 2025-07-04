@@ -39,8 +39,25 @@ export const resolvers = {
       _parent: unknown,
       args: { input: gql.CreateUserInput },
       ctx: UserContext,
-    ): Promise<gql.User> => {
-      return await ctx.userService.createUser(args.input);
+    ): Promise<gql.CreateUserResponse> => {
+      const alreadyExists = await ctx.userService.checkUserExists({
+        email: args.input.email,
+        name: args.input.name,
+      });
+
+      if (alreadyExists) {
+        return {
+          status: createBadRequestStatus(
+            "User with that name or email already exists",
+          ),
+        };
+      }
+
+      const result = await ctx.userService.createUser(args.input);
+
+      return result
+        ? { status: createSuccessStatus(), data: result }
+        : { status: createBadRequestStatus("Failed to create user") };
     },
 
     updateUser: async (
@@ -50,16 +67,9 @@ export const resolvers = {
     ): Promise<gql.UpdateUserResponse> => {
       const result = await ctx.userService.updateUser(args.input);
 
-      if (result) {
-        return {
-          status: createSuccessStatus(),
-          data: result,
-        };
-      }
-
-      return {
-        status: createBadRequestStatus("Error updating user"),
-      };
+      return result
+        ? { status: createSuccessStatus(), data: result }
+        : { status: createBadRequestStatus("Failed to update user") };
     },
   },
 };

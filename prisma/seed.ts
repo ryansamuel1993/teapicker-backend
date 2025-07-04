@@ -1,5 +1,7 @@
 import { PrismaClient, DrinkType, SweetenerType, MilkStrength, OrderType } from '@prisma/client';
 import { faker } from '@faker-js/faker';
+import { generateRandomAvatarUrl } from '../src/utils/user';
+import { MediaType } from '../src/user/types';
 
 const prisma = new PrismaClient();
 
@@ -36,8 +38,15 @@ async function seed() {
         data: {
           name: faker.person.fullName(),
           email: faker.internet.email(),
-          contactNumber: faker.number.int({ min: 1000000000, max: 9999999999 }),
+          contactNumber: faker.number.int({ min: 1000000000, max: 9999999999 }).toString(),
           teamId: team?.id,
+          media: {
+            create: {
+              url: generateRandomAvatarUrl(),
+              type: MediaType.Avatar,
+            },
+          },
+
         },
       });
 
