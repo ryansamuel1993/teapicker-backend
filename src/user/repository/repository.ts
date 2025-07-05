@@ -10,7 +10,6 @@ export interface IUserRepository {
   createUser(data: CreateUserInput): Promise<User>;
   updateUser(user: UpdateUserInput): Promise<User>;
   getUserById(id: string): Promise<User | undefined>;
-  getUserById(id: string): Promise<User | undefined>;
   getAllUsers(): Promise<User[]>;
 }
 

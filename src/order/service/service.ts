@@ -1,15 +1,21 @@
 import { IOrderRepository } from "../repository/repository";
 import { CreateOrderInput, Item, Order } from "../types";
+import { NotificationService } from "../../../messaging-service/src/service";
+import { IUserRepository } from "../../user/repository/repository";
 
 export type IOrderService = {
   getAllOrders(): Promise<Order[]>;
-  getOrderById(id: String): Promise<Order>;
+  getOrderById(id: string): Promise<Order>;
   getMenu(): Promise<Item[]>;
   createOrder(input: CreateOrderInput): Promise<Order>;
 };
 
 export class OrderService implements IOrderService {
-  constructor(private orderRepository: IOrderRepository) {}
+  constructor(
+    private orderRepository: IOrderRepository,
+    private userRepository: IUserRepository,
+    private notificationService: NotificationService,
+  ) {}
 
   async getMenu(): Promise<Item[]> {
     return await this.orderRepository.getMenu();
@@ -30,6 +36,13 @@ export class OrderService implements IOrderService {
   }
 
   async createOrder(input: CreateOrderInput): Promise<Order> {
-    return await this.orderRepository.createOrder(input);
+    const order = await this.orderRepository.createOrder(input);
+    const user = await this.userRepository.getUserById(input.userId);
+
+    if (order && user) {
+      await this.notificationService.notifyOrderPlaced(user, input);
+    }
+
+    return order;
   }
 }

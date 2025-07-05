@@ -40,9 +40,10 @@ export const createContext = (): GQLContext => {
     prisma,
     teamService: new TeamService(teamRepo),
     userService: new UserService(userRepo, ratingRepo, preferencesRepo),
-    orderService: new OrderService(orderRepo),
+    orderService: new OrderService(orderRepo, userRepo, notificationService),
     playService: new PlayService(orderRepo),
     preferencesService: new PreferencesService(preferencesRepo),
     ratingService: new RatingService(ratingRepo),
+    notificationService: new NotificationService(),
   };
 };

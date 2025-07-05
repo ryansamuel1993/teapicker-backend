@@ -8,7 +8,6 @@ export class PlayService implements IPlayService {
   constructor(private orderRepository: IOrderRepository) {}
 
   async getPlayResult(play: PlayEntryInput): Promise<string> {
-    console.log(play.players);
     const userRanks = await this.orderRepository.getUserOrderRanks(
       play.players,
     );

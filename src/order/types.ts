@@ -2,6 +2,7 @@ import {
   OrderItem as PrismaOrderItem,
   Item as PrismaItem,
   Order as PrismaOrder,
+  OrderType,
 } from "@prisma/client";
 
 export type Item = PrismaItem;
@@ -21,5 +22,6 @@ export type CreateOrderInput = {
   teamId: string;
   userId: string;
   notes?: string;
+  orderType?: OrderType;
   items: CreateOrderInputItem[];
 };

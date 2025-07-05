@@ -17,13 +17,14 @@ export class OrderRepository implements IOrderRepository {
   constructor(private prisma: PrismaClient) {}
 
   async createOrder(input: CreateOrderInput): Promise<Order> {
-    const { userId, notes, items, teamId } = input;
+    const { userId, notes, items, teamId, orderType } = input;
 
     const result = await this.prisma.order.create({
       data: {
         userId,
         teamId,
         notes,
+        orderType,
         items: {
           create: items.map(({ itemId, quantity }) => ({
             item: { connect: { id: itemId } },
@@ -32,11 +33,9 @@ export class OrderRepository implements IOrderRepository {
         },
       },
       include: {
+        items: { include: { item: true } },
         user: true,
         team: true,
-        items: {
-          include: { item: true },
-        },
       },
     });
 

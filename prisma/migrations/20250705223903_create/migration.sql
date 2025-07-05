@@ -2,7 +2,7 @@
 CREATE TABLE "User" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "name" TEXT NOT NULL,
-    "email" TEXT,
+    "email" TEXT NOT NULL,
     "contactNumber" TEXT,
     "teamId" TEXT,
     CONSTRAINT "User_teamId_fkey" FOREIGN KEY ("teamId") REFERENCES "Team" ("id") ON DELETE SET NULL ON UPDATE CASCADE
@@ -36,25 +36,6 @@ CREATE TABLE "Preferences" (
     "milkStrength" TEXT NOT NULL,
     "notes" TEXT,
     CONSTRAINT "Preferences_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
-);
-
--- CreateTable
-CREATE TABLE "Boost" (
-    "id" TEXT NOT NULL PRIMARY KEY,
-    "boost" TEXT NOT NULL,
-    "cooldown" INTEGER,
-    "notes" TEXT
-);
-
--- CreateTable
-CREATE TABLE "BoostUsage" (
-    "id" TEXT NOT NULL PRIMARY KEY,
-    "userId" TEXT NOT NULL,
-    "boostId" TEXT NOT NULL,
-    "remaining" INTEGER NOT NULL,
-    "notes" TEXT,
-    CONSTRAINT "BoostUsage_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
-    CONSTRAINT "BoostUsage_boostId_fkey" FOREIGN KEY ("boostId") REFERENCES "Boost" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 -- CreateTable
