@@ -1,10 +1,12 @@
 import { sendEmail } from "./email/email";
 import { sendSMS } from "./sms/sms";
 
-async function bootstrap() {
-  // Simulated job handler (replace with Redis queue or API call)
-  await sendEmail("user@example.com", "Welcome!", "Thanks for joining!");
-  await sendSMS("+441234567890", "Hi there! Thanks for joining us!");
-}
+export class NotificationService {
+  async sendEmail(to: string, subject: string, body: string) {
+    return await sendEmail(to, subject, body);
+  }
 
-bootstrap();
+  async sendSMS(to: string, message: string) {
+    return await sendSMS(to, message);
+  }
+}

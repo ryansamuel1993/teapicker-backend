@@ -16,7 +16,11 @@ export class TeamRepository implements ITeamRepository {
   async getAllTeams(): Promise<Team[]> {
     const result = await this.prisma.team.findMany({
       include: {
-        members: true,
+        members: {
+          include: {
+            media: true,
+          },
+        },
       },
     });
 
@@ -45,7 +49,7 @@ export class TeamRepository implements ITeamRepository {
       data: {
         name,
         members: {
-          create: (users ?? []).map((member) => ({
+          create: users?.map((member) => ({
             name: member.name,
             email: member.email,
             contactNumber: member.contactNumber,

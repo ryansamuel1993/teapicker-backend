@@ -18,6 +18,7 @@ export type CreateOrderInputItem = {
 };
 
 export type CreateOrderInput = {
+  teamId: string;
   userId: string;
   notes?: string;
   items: CreateOrderInputItem[];

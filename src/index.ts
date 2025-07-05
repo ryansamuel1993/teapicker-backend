@@ -1,10 +1,9 @@
 import { ApolloServer } from "apollo-server";
-
 import { createContext } from "./context";
-import { schema } from "./schema"; // ✅ Use named import
+import { schema } from "./schema";
 
 const server = new ApolloServer({
-  schema, // ✅ Use the full executable schema
+  schema,
   context: createContext,
 });
 

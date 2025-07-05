@@ -5,7 +5,7 @@ interface OrderContext {
   orderService: IOrderService;
 }
 
-const getOrder = async (
+const getOrderFn = async (
   _parent: unknown,
   args: { input: gql.Order },
   ctx: OrderContext,
@@ -13,7 +13,15 @@ const getOrder = async (
   return await ctx.orderService.getOrderById(args.input.id);
 };
 
-const getAllOrders = async (
+const getMenuFN = async (
+  _parent: unknown,
+  _args: unknown,
+  ctx: OrderContext,
+) => {
+  return await ctx.orderService.getMenu();
+};
+
+const getAllOrdersFn = async (
   _parent: unknown,
   _: { input: gql.Order },
   ctx: OrderContext,
@@ -21,7 +29,7 @@ const getAllOrders = async (
   return await ctx.orderService.getAllOrders();
 };
 
-const createOrder = async (
+const createOrderFn = async (
   _parent: unknown,
   args: { input: gql.CreateOrderInput },
   ctx: OrderContext,
@@ -31,10 +39,11 @@ const createOrder = async (
 
 export const resolver = {
   Query: {
-    getOrder: getOrder,
-    getAllOrders: getAllOrders,
+    getMenu: getMenuFN,
+    getOrder: getOrderFn,
+    getAllOrders: getAllOrdersFn,
   },
   Mutation: {
-    createOrder,
+    createOrder: createOrderFn,
   },
 };

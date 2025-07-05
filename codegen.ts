@@ -17,6 +17,16 @@ const config: CodegenConfig = {
         maybeValue: "T",
       },
     },
+    "src/preferences/gql/preferences-gen.gql.ts": {
+      schema: [
+        "./src/common/gql/common.gql",
+        "./src/preferences/gql/preferences.gql",
+      ],
+      plugins: ["typescript", "typescript-resolvers"],
+      config: {
+        maybeValue: "T",
+      },
+    },
     "src/order/gql/order-gen.gql.ts": {
       schema: [
         "./src/common/gql/common.gql",
@@ -30,7 +40,11 @@ const config: CodegenConfig = {
     },
 
     "src/user/gql/user-gen.gql.ts": {
-      schema: ["./src/common/gql/common.gql", "./src/user/gql/user.gql"],
+      schema: [
+        "./src/common/gql/common.gql",
+        "./src/preferences/gql/preferences.gql",
+        "./src/user/gql/user.gql",
+      ],
       plugins: ["typescript", "typescript-resolvers"],
       config: {
         maybeValue: "T",
@@ -40,6 +54,7 @@ const config: CodegenConfig = {
     "src/team/gql/team-gen.gql.ts": {
       schema: [
         "./src/common/gql/common.gql",
+        "./src/preferences/gql/preferences.gql",
         "./src/user/gql/user.gql",
         "./src/team/gql/team.gql",
       ],
@@ -49,24 +64,13 @@ const config: CodegenConfig = {
       },
     },
 
-    "src/preferences/gql/preferences-gen.gql.ts": {
-      schema: [
-        "./src/common/gql/common.gql",
-        "./src/preferences/gql/preferences.gql",
-      ],
+    "src/play/gql/play-gen.gql.ts": {
+      schema: ["./src/common/gql/common.gql", "./src/play/gql/play.gql"],
       plugins: ["typescript", "typescript-resolvers"],
       config: {
         maybeValue: "T",
       },
     },
-
-    // "src/boost/gql/boost-gen.gql.ts": {
-    //   schema: ["./src/common/gql/common.gql", "./src/boost/gql/boost.gql"],
-    //   plugins: ["typescript", "typescript-resolvers"],
-    //   config: {
-    //     maybeValue: "T",
-    //   },
-    // },
   },
 };
 

@@ -1,16 +1,32 @@
 import { MediaType, PrismaClient } from "@prisma/client";
 import { CreateUserInput, UpdateUserInput, User } from "../types";
-import { generateRandomAvatarUrl, mapUserFromPrisma } from "../../utils/user";
+import {
+  generateRandomAvatarUrl,
+  mapUserFromPrisma,
+} from "../../utils/maps/user";
 
 export interface IUserRepository {
+  login(email: string): Promise<User | undefined>;
   createUser(data: CreateUserInput): Promise<User>;
   updateUser(user: UpdateUserInput): Promise<User>;
+  getUserById(id: string): Promise<User | undefined>;
   getUserById(id: string): Promise<User | undefined>;
   getAllUsers(): Promise<User[]>;
 }
 
 export class UserRepository implements IUserRepository {
   constructor(private prisma: PrismaClient) {}
+
+  async login(email: string): Promise<User | undefined> {
+    const result = await this.prisma.user.findFirst({
+      where: { email },
+      include: {
+        media: true,
+      },
+    });
+
+    return result ? mapUserFromPrisma(result) : undefined;
+  }
 
   async createUser(user: CreateUserInput): Promise<User> {
     const { name, email, contactNumber, teamId } = user;
@@ -63,12 +79,14 @@ export class UserRepository implements IUserRepository {
   }
 
   async getAllUsers(): Promise<User[]> {
-    const result = await this.prisma.user.findMany({
+    const users = await this.prisma.user.findMany({
       include: {
         media: true,
       },
     });
 
-    return result.map((user) => mapUserFromPrisma(user));
+    return users.map((user) => {
+      return mapUserFromPrisma(user);
+    });
   }
 }

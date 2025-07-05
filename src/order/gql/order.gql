@@ -38,6 +38,7 @@ input OrderItemInput {
 }
 
 input CreateOrderInput {
+  teamId: ID!
   orderType: OrderType
   userId: ID!
   notes: String
@@ -55,8 +56,8 @@ type CreateOrderResponse {
 
 type Query {
   getOrder(id: ID!): Order
-  getAllOrders: [Order!]!
-  getMenu: [Item!]!
+  getAllOrders: [Order]
+  getMenu: [Item]
 }
 
 # --------------------- Mutations --------------------#

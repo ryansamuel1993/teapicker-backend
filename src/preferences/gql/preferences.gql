@@ -24,7 +24,6 @@ enum MilkStrength {
 # --------------------- Types ---------------------
 
 type Preferences {
-  id: ID!
   userId: ID!
   drinkType: DrinkType!
   sweetenerType: SweetenerType
@@ -57,10 +56,6 @@ type UpdatePreferencesResponse {
 }
 
 # --------------------- Queries ---------------------
-
-type Query {
-  getUserPreferences(userId: ID!): Preferences
-}
 
 # --------------------- Mutations ---------------------
 

@@ -1,21 +1,47 @@
+import { Preferences } from "../../preferences/types";
+import { IRatingRepository } from "../../rating/repository/repository";
+import { IPreferencesRepository } from "../../preferences/repository/repository";
 import { CheckUserExistsInput, UpdateUserInput } from "../gql/user-gen.gql";
 import { IUserRepository } from "../repository/repository";
 import { CreateUserInput, User } from "../types";
 import DataLoader from "dataloader";
 
 export interface IUserService {
+  login(email: string): Promise<User | undefined>;
   getUserById(id: string): Promise<User | undefined>;
   getAllUsers(): Promise<User[]>;
   createUser(input: Partial<User>): Promise<User>;
   updateUser(input: UpdateUserInput): Promise<User>;
   checkUserExists(input: CheckUserExistsInput): Promise<boolean>;
+  getAverageRating(userId: string): Promise<number | undefined>;
+  getUserPreferences(userId: string): Promise<Preferences | undefined>;
 }
 
 export class UserService implements IUserService {
   private emailAndNameLoader: DataLoader<"email" | "name", Set<string>>;
+  private averageRatingLoader: DataLoader<string, number | undefined>;
+  private preferencesLoader: DataLoader<string, Preferences | undefined>;
 
-  constructor(private userRepository: IUserRepository) {
+  constructor(
+    private userRepository: IUserRepository,
+    private ratingRepository: IRatingRepository,
+    private preferencesRepository: IPreferencesRepository,
+  ) {
     this.emailAndNameLoader = this.createUserExistenceListLoader();
+    this.averageRatingLoader = this.createAverageRatingLoader();
+    this.preferencesLoader = this.createPreferencesLoader();
+  }
+
+  login(email: string): Promise<User | undefined> {
+    return this.userRepository.login(email);
+  }
+
+  getAverageRating(userId: string): Promise<number | undefined> {
+    return this.averageRatingLoader.load(userId);
+  }
+
+  async getUserPreferences(userId: string): Promise<Preferences | undefined> {
+    return this.preferencesLoader.load(userId);
   }
 
   private createUserExistenceListLoader = () =>
@@ -38,6 +64,25 @@ export class UserService implements IUserService {
       return ["email", "name"].map((type) =>
         type === "email" ? emailSet : nameSet,
       );
+    });
+
+  private createAverageRatingLoader = () =>
+    new DataLoader<string, number | undefined>(async (userIds) => {
+      const ratings = await this.ratingRepository.getAverageRatings();
+      const ratingMap = new Map<string, number | undefined>();
+      ratings.forEach(({ userId, average }) => {
+        ratingMap.set(userId, average ?? undefined);
+      });
+
+      return userIds.map((id) => ratingMap.get(id) ?? 0);
+    });
+
+  private createPreferencesLoader = () =>
+    new DataLoader<string, Preferences | undefined>(async (userIds) => {
+      const preferences = await this.preferencesRepository.getPreferences();
+      const map = new Map(preferences.map((p) => [p?.userId, p]));
+
+      return userIds.map((id) => map.get(id) ?? undefined);
     });
 
   async checkUserExists(input: CheckUserExistsInput): Promise<boolean> {

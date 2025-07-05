@@ -1,3 +1,5 @@
+import { Preferences } from "../preferences/types";
+
 export type User = {
   id: string;
   name: string;
@@ -5,7 +7,10 @@ export type User = {
   contactNumber?: string;
   teamId?: string;
   media: UserMedia[];
+  preferences?: Preferences;
+  averageRating?: number;
 };
+
 export type CreatmUserMedia = Omit<UserMedia, "id">;
 
 export type UserMedia = {
@@ -14,6 +19,7 @@ export type UserMedia = {
   url: string;
   type: MediaType;
   alt?: string;
+  createdAt: Date;
 };
 
 export enum MediaType {
@@ -25,7 +31,7 @@ export enum MediaType {
 
 export type CreateUserInput = {
   name: string;
-  email?: string;
+  email: string;
   contactNumber?: string;
   teamId?: string;
 };

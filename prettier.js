@@ -2,6 +2,7 @@ module.exports = {
   bracketSameLine: false,
   singleQuote: true,
   trailingComma: "all",
+  printWidth: 120,
   endOfLine: "auto",
-  parser: "typescript",
+  tabWidth: 2,
 };

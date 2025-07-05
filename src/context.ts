@@ -11,6 +11,9 @@ import { UserService } from "./user/service/service";
 import { OrderService } from "./order/service/service";
 import { PreferencesService } from "./preferences/service/service";
 import { RatingService } from "./rating/service/service";
+import { PlayService } from "./play/service/service";
+
+import { NotificationService } from "../messaging-service/src/worker";
 
 const prisma = new PrismaClient();
 
@@ -21,25 +24,25 @@ export type GQLContext = {
   orderService: OrderService;
   preferencesService: PreferencesService;
   ratingService: RatingService;
+  playService: PlayService;
+  notificationService: NotificationService;
 };
 
 export const createContext = (): GQLContext => {
   const teamRepo = new TeamRepository(prisma);
   const userRepo = new UserRepository(prisma);
-  const orderRepo = new OrderRepository(prisma, teamRepo);
-  //const boostRepo = new BoostRepository(prisma);
+  const orderRepo = new OrderRepository(prisma);
   const preferencesRepo = new PreferencesRepository(prisma);
   const ratingRepo = new RatingRepository(prisma);
-  //const itemRepo = new ItemRepository(prisma);
+  const notificationService = new NotificationService();
 
   return {
     prisma,
     teamService: new TeamService(teamRepo),
-    userService: new UserService(userRepo),
+    userService: new UserService(userRepo, ratingRepo, preferencesRepo),
     orderService: new OrderService(orderRepo),
-    //boostService: new BoostService(boostRepo),
+    playService: new PlayService(orderRepo),
     preferencesService: new PreferencesService(preferencesRepo),
     ratingService: new RatingService(ratingRepo),
-    //itemService: new ItemService(itemRepo),
   };
 };

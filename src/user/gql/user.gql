@@ -7,6 +7,8 @@ type User {
   email: String
   contactNumber: String
   media: [UserMedia]
+  averageRating: Int
+  preferences: Preferences
 }
 
 enum MediaType {
@@ -63,6 +65,7 @@ type UpdateUserResponse {
 # --------------------- Queries --------------------#
 
 type Query {
+  login(email: String): User
   getUserById(userId: ID): User
   getAllUsers: [User]
 }

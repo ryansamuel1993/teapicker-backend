@@ -1,6 +1,6 @@
 import { PrismaClient, DrinkType, SweetenerType, MilkStrength, OrderType } from '@prisma/client';
 import { faker } from '@faker-js/faker';
-import { generateRandomAvatarUrl } from '../src/utils/user';
+import { generateRandomAvatarUrl } from '../src/utils/maps/user';
 import { MediaType } from '../src/user/types';
 
 const prisma = new PrismaClient();
@@ -11,86 +11,18 @@ async function seed() {
   await prisma.orderItem.deleteMany();
   await prisma.order.deleteMany();
   await prisma.boostUsage.deleteMany();
-  await prisma.boost?.deleteMany?.();
   await prisma.boost.deleteMany();
   await prisma.preferences.deleteMany();
   await prisma.item.deleteMany();
   await prisma.user.deleteMany();
   await prisma.team.deleteMany();
 
-  console.log('🏗️ Creating teams...');
-  const teams = await Promise.all(
-    Array.from({ length: 2 }, () =>
-      prisma.team.create({
-        data: {
-          name: faker.company.name(),
-        },
-      })
-    )
-  );
-
-  console.log('👥 Creating users with preferences...');
-  const users = await Promise.all(
-    Array.from({ length: 5 }, async () => {
-      const team = faker.helpers.arrayElement([...teams, undefined]);
-
-      const user = await prisma.user.create({
-        data: {
-          name: faker.person.fullName(),
-          email: faker.internet.email(),
-          contactNumber: faker.number.int({ min: 1000000000, max: 9999999999 }).toString(),
-          teamId: team?.id,
-          media: {
-            create: {
-              url: generateRandomAvatarUrl(),
-              type: MediaType.Avatar,
-            },
-          },
-
-        },
-      });
-
-      await prisma.preferences.create({
-        data: {
-          userId: user.id,
-          drinkType: faker.helpers.arrayElement(Object.values(DrinkType)),
-          sweetenerType: faker.helpers.arrayElement(Object.values(SweetenerType)),
-          sugarAmount: faker.number.int({ min: 0, max: 3 }),
-          milkStrength: faker.helpers.arrayElement(Object.values(MilkStrength)),
-          notes: faker.lorem.words(3),
-        },
-      });
-
-      return user;
-    })
-  );
-
-  console.log('🍹 Creating boosts and boost usages...');
-  const boosts = await Promise.all(
-    Array.from({ length: 3 }, () =>
-      prisma.boost.create({
-        data: {
-          boost: faker.hacker.verb(),
-          cooldown: faker.number.int({ min: 10, max: 60 }),
-          notes: faker.lorem.words(2),
-        },
-      })
-    )
-  );
-
-  for (const user of users) {
-    const usedBoosts = faker.helpers.arrayElements(boosts, faker.number.int({ min: 1, max: boosts.length }));
-    for (const boost of usedBoosts) {
-      await prisma.boostUsage.create({
-        data: {
-          userId: user.id,
-          boostId: boost.id,
-          remaining: faker.number.int({ min: 1, max: 5 }),
-          notes: faker.lorem.words(2),
-        },
-      });
-    }
-  }
+  console.log('🏗️ Creating 1 team...');
+  const team = await prisma.team.create({
+    data: {
+      name: faker.company.name(),
+    },
+  });
 
   console.log('🛍️ Creating items...');
   const items = await Promise.all(
@@ -104,9 +36,58 @@ async function seed() {
     )
   );
 
-  console.log('📦 Creating orders, items, and ratings...');
-  for (const user of users) {
-    const team = teams.find(t => t.id === user.teamId) ?? faker.helpers.arrayElement(teams);
+  console.log('⚡ Creating boosts...');
+  const boosts = await Promise.all(
+    Array.from({ length: 3 }, () =>
+      prisma.boost.create({
+        data: {
+          boost: faker.hacker.verb(),
+          cooldown: faker.number.int({ min: 10, max: 60 }),
+          notes: faker.lorem.words(2),
+        },
+      })
+    )
+  );
+
+  console.log('👥 Creating 3 users with full data...');
+  for (let i = 0; i < 3; i++) {
+    const user = await prisma.user.create({
+      data: {
+        name: faker.person.fullName(),
+        email: faker.internet.email(),
+        contactNumber: faker.phone.number(),
+        teamId: team.id,
+        media: {
+          create: {
+            url: generateRandomAvatarUrl(),
+            type: MediaType.Avatar,
+          },
+        },
+      },
+    });
+
+    await prisma.preferences.create({
+      data: {
+        userId: user.id,
+        drinkType: faker.helpers.arrayElement(Object.values(DrinkType)),
+        sweetenerType: faker.helpers.arrayElement(Object.values(SweetenerType)),
+        sugarAmount: faker.number.int({ min: 0, max: 3 }),
+        milkStrength: faker.helpers.arrayElement(Object.values(MilkStrength)),
+        notes: faker.lorem.words(3),
+      },
+    });
+
+    const usedBoosts = faker.helpers.arrayElements(boosts, faker.number.int({ min: 1, max: boosts.length }));
+    for (const boost of usedBoosts) {
+      await prisma.boostUsage.create({
+        data: {
+          userId: user.id,
+          boostId: boost.id,
+          remaining: faker.number.int({ min: 1, max: 5 }),
+          notes: faker.lorem.words(2),
+        },
+      });
+    }
 
     const order = await prisma.order.create({
       data: {

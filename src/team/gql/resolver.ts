@@ -3,7 +3,7 @@ import { ITeamService } from "../service/service";
 import {
   createBadRequestStatus,
   createSuccessStatus,
-} from "../../utils/response";
+} from "../../utils/maps/response";
 
 interface TeamContext {
   teamService: ITeamService;

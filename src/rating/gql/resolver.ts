@@ -3,7 +3,7 @@ import { formatDate } from "../../utils/format";
 import {
   createBadRequestStatus,
   createSuccessStatus,
-} from "../../utils/response";
+} from "../../utils/maps/response";
 import { IRatingService } from "../service/service";
 
 export type RatingsContext = {

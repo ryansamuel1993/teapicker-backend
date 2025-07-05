@@ -1,0 +1,16 @@
+input PlayEntryInput {
+  players: [String]
+}
+
+type PlayResponse {
+  loser: String
+}
+
+type PlayResponse {
+  status: ResponseStatus
+  data: String
+}
+
+type Mutation {
+  getPlayResult(play: PlayEntryInput): PlayResponse
+}

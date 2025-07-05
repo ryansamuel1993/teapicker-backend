@@ -10,11 +10,11 @@ const loadSDL = (relativePath: string) =>
 
 const commonTypeDefs = loadSDL("./common/gql/common.gql");
 const userTypeDefs = loadSDL("./user/gql/user.gql");
+const playTypeDefs = loadSDL("./play/gql/play.gql");
 const teamTypeDefs = loadSDL("./team/gql/team.gql");
 const orderTypeDefs = loadSDL("./order/gql/order.gql");
 const ratingTypeDefs = loadSDL("./rating/gql/rating.gql");
 const preferencesTypeDefs = loadSDL("./preferences/gql/preferences.gql");
-//const boostTypeDefs = loadSDL("./boost/gql/boost.gql");
 
 // --------------------- Resolver Imports --------------------- //
 
@@ -23,8 +23,8 @@ import { resolver as orderresolver } from "./order/gql/resolver";
 import { resolver as preferencesresolver } from "./preferences/gql/resolver";
 import { resolver as ratingresolver } from "./rating/gql/resolver";
 import { resolver as teamresolver } from "./team/gql/resolver";
-import { resolvers as userresolver } from "./user/gql/resolver";
-//import { resolver as boostresolver } from "./boost/gql/resolver";
+import { resolver as userresolver } from "./user/gql/resolver";
+import { resolver as playResolver } from "./play/gql/resolver";
 
 // --------------------- Merge --------------------- //
 
@@ -35,7 +35,7 @@ const typeDefs = [
   orderTypeDefs,
   ratingTypeDefs,
   preferencesTypeDefs,
-  //boostTypeDefs,
+  playTypeDefs,
 ];
 
 const resolvers = [
@@ -45,7 +45,7 @@ const resolvers = [
   orderresolver,
   ratingresolver,
   preferencesresolver,
-  //boostresolver,
+  playResolver,
 ];
 
 // --------------------- Schema Build --------------------- //

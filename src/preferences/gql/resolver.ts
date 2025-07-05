@@ -2,7 +2,7 @@ import * as gql from "../../preferences/gql/preferences-gen.gql";
 import {
   createBadRequestStatus,
   createSuccessStatus,
-} from "../../utils/response";
+} from "../../utils/maps/response";
 import { IPreferencesService } from "../service/service";
 
 export type PreferencesContext = {
@@ -10,24 +10,6 @@ export type PreferencesContext = {
 };
 
 export const resolver = {
-  Query: {
-    getUserPreferences: async (
-      _parent: unknown,
-      args: { userId: string },
-      ctx: PreferencesContext,
-    ): Promise<gql.Preferences> => {
-      const result = await ctx.preferencesService.getUserPreferences(
-        args.userId,
-      );
-
-      if (!result) {
-        throw new Error("No preferences found for user member");
-      }
-
-      return result;
-    },
-  },
-
   Mutation: {
     createPreferences: async (
       _parent: unknown,

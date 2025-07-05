@@ -15,7 +15,6 @@ export const convertNullToUndefined = <
 ): ReplaceNullWithUndefined<T> => {
   return Object.entries(obj).reduce<ReplaceNullWithUndefined<T>>(
     (acc, [key, value]) => {
-      // Replace nulls with undefined
       if (value === null) {
         return {
           ...acc,
@@ -31,7 +30,6 @@ export const convertNullToUndefined = <
         };
       }
 
-      // Recursively replace nulls with undefined in nested objects
       return {
         ...acc,
         [key]: convertNullToUndefined(value as T),

@@ -43,11 +43,10 @@ enum OrderType {
 model User {
   id            String         @id @default(uuid())
   name          String
-  email         String?
+  email         String
   contactNumber String?
   teamId        String?
   team    Team?    @relation("TeamMembers", fields: [teamId], references: [id])
-  boostUsages   BoostUsage[]
   orders        Order[]
   preferences   Preferences?
   ratings       Rating[]
@@ -83,24 +82,6 @@ model Preferences {
   user         User          @relation(fields: [userId], references: [id])
 }
 
-model Boost {
-  id          String       @id @default(uuid())
-  boost       String
-  cooldown    Int?
-  notes       String?
-  boostUsages BoostUsage[]
-}
-
-model BoostUsage {
-  id        String  @id @default(uuid())
-  userId   String
-  boostId   String
-  remaining Int
-  notes     String?
-  user     User   @relation(fields: [userId], references: [id])
-  boost     Boost   @relation(fields: [boostId], references: [id])
-}
-
 model Rating {
   id        String    @id @default(uuid())
   userId   String
@@ -120,7 +101,7 @@ model Rating {
 
 model Order {
   id          String      @id @default(uuid())
-  userId     String
+  userId      String
   teamId      String
   notes       String?
   createdAt   DateTime    @default(now())

@@ -1,6 +1,4 @@
 import { PrismaClient } from "@prisma/client";
-
-import { ITeamRepository } from "../../team/repository/repository";
 import { Order, Item, CreateOrderInput } from "../types";
 
 export interface IOrderRepository {
@@ -9,27 +7,22 @@ export interface IOrderRepository {
   getOrderById(id: string): Promise<Order>;
   getMenu(): Promise<Item[]>;
   getItemsByIds(itemIds: string[]): Promise<Item[]>;
+  getAllItems(): Promise<Item[]>;
+  getUserOrderRanks(
+    userIds: string[],
+  ): Promise<{ userId: string; latestRank: number; countRank: number }[]>;
 }
 
 export class OrderRepository implements IOrderRepository {
-  constructor(
-    private prisma: PrismaClient,
-    private teamRepository: ITeamRepository,
-  ) {}
+  constructor(private prisma: PrismaClient) {}
 
   async createOrder(input: CreateOrderInput): Promise<Order> {
-    const { userId, notes, items } = input;
-
-    const team = await this.teamRepository.getTeamByUserId(userId);
-
-    if (!team) {
-      throw new Error("No team found for user member");
-    }
+    const { userId, notes, items, teamId } = input;
 
     const result = await this.prisma.order.create({
       data: {
         userId,
-        teamId: team.id,
+        teamId,
         notes,
         items: {
           create: items.map(({ itemId, quantity }) => ({
@@ -91,11 +84,60 @@ export class OrderRepository implements IOrderRepository {
     });
   }
 
+  async getAllItems(): Promise<Item[]> {
+    return await this.prisma.item.findMany({
+      orderBy: { name: "asc" },
+    });
+  }
+
   async getItemsByIds(itemIds: string[]): Promise<Item[]> {
     return await this.prisma.item.findMany({
       where: {
         id: { in: itemIds },
       },
     });
+  }
+
+  async getUserOrderRanks(
+    userIds: string[],
+  ): Promise<{ userId: string; latestRank: number; countRank: number }[]> {
+    const recentOrders = await this.prisma.order.findMany({
+      where: { userId: { in: userIds } },
+      orderBy: { createdAt: "desc" },
+      select: { userId: true, createdAt: true },
+    });
+
+    const recentUserIds = [...new Set(recentOrders.map((o) => o.userId))];
+    const latestRanks = new Map<string, number>(
+      recentUserIds.map((userId, index) => [userId, index + 1]),
+    );
+
+    const orderCounts = await this.prisma.order.groupBy({
+      by: ["userId"],
+      where: { userId: { in: userIds } },
+      _count: { userId: true },
+    });
+
+    const countMap = new Map<string, number>(
+      orderCounts.map((o) => [o.userId, o._count.userId]),
+    );
+
+    const usersWithCounts = userIds.map((userId) => ({
+      userId,
+      count: countMap.get(userId) ?? 0,
+    }));
+
+    const sortedByCount = [...usersWithCounts].sort(
+      (a, b) => b.count - a.count,
+    );
+    const countRanks = new Map<string, number>(
+      sortedByCount.map((entry, index) => [entry.userId, index + 1]),
+    );
+
+    return userIds.map((userId) => ({
+      userId,
+      latestRank: latestRanks.get(userId) ?? userIds.length,
+      countRank: countRanks.get(userId) ?? userIds.length,
+    }));
   }
 }

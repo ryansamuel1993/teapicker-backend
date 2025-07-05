@@ -1,4 +1,4 @@
-import { ResponseStatus } from "../common/gql/common-gen.gql";
+import { ResponseStatus } from "../../common/gql/common-gen.gql";
 
 export const createSuccessStatus = (): ResponseStatus => {
   return {

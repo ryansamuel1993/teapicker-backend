@@ -1,6 +1,10 @@
-import { UserMedia as GQLMedia } from "@prisma/client";
-import { MediaType, User, UserMedia } from "../user/types";
-import { convertNullToUndefined } from "./map";
+import {
+  UserMedia as GQLMedia,
+  Preferences as GQLPreferences,
+} from "@prisma/client";
+import { MediaType, User, UserMedia } from "../../user/types";
+import { mapPreferencesFromPrisma } from "./preferences";
+import { convertNullToUndefined } from "./common";
 
 export function generateRandomAvatarUrl(): string {
   const randomNumber = Math.floor(Math.random() * 50) + 1;
@@ -16,7 +20,6 @@ export function mapUserFromPrisma(user: {
   teamId: string | null;
   media: GQLMedia[];
 }): User {
-  const u = convertNullToUndefined(user);
   const media = user.media.map((m) => ({
     id: m.id,
     userId: m.userId,
@@ -25,6 +28,8 @@ export function mapUserFromPrisma(user: {
     type: m.type as MediaType,
     createdAt: m.createdAt,
   })) as UserMedia[];
+
+  const u = convertNullToUndefined(user);
 
   return {
     id: u.id,

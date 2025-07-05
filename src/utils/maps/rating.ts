@@ -5,8 +5,8 @@ import {
   Rating,
   Score,
   ScoreRank,
-} from "../rating/types";
-import { formatByteArray } from "./format";
+} from "../../rating/types";
+import { formatByteArray } from "../format";
 
 export const calculateOverallScore = (
   quality: Score,
