@@ -4,6 +4,7 @@ import { User } from "../../src/user/types";
 import { CreateOrderInput } from "../../src/order/types";
 import { LogRepository } from "./repository";
 import { formatUKPhoneNumber } from "./utils";
+import { env } from "./env";
 
 config();
 
@@ -15,27 +16,29 @@ export class LoggerService {
 
   constructor(logger: LogRepository) {
     this.logger = logger;
-    this.smsEnabled = process.env.SMS_ENABLED === "true";
+    this.smsEnabled = env.SMS_ENABLED;
 
-    if (this.smsEnabled) {
-      const sid = process.env.TWILIO_SID;
-      const token = process.env.TWILIO_AUTH_TOKEN;
-      const from = process.env.TWILIO_FROM_NUMBER;
+    const { TWILIO_SID, TWILIO_AUTH_TOKEN, TWILIO_FROM_NUMBER } = env;
 
-      if (!sid || !token || !from) {
-        throw new Error(
-          "Missing Twilio env vars—please set TWILIO_SID, TWILIO_AUTH_TOKEN, and TWILIO_FROM_NUMBER",
-        );
-      }
-
-      this.client = new Twilio(sid, token);
-      this.fromNumber = from;
+    if (
+      this.smsEnabled &&
+      TWILIO_SID &&
+      TWILIO_AUTH_TOKEN &&
+      TWILIO_FROM_NUMBER
+    ) {
+      this.client = new Twilio(TWILIO_SID, TWILIO_AUTH_TOKEN);
+      this.fromNumber = TWILIO_FROM_NUMBER;
+    } else if (this.smsEnabled) {
+      console.warn(
+        "[LoggerService] SMS is enabled but Twilio environment variables are missing. SMS will be disabled.",
+      );
+      this.smsEnabled = false;
     }
   }
 
   public async sendOrderSMS(user: User, order: CreateOrderInput) {
     if (!this.smsEnabled) {
-      console.log("SMS is disabled by configuration; skipping sendSMS.");
+      console.log("[LoggerService] SMS is disabled; skipping sendOrderSMS.");
 
       return;
     }
