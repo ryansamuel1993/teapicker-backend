@@ -1,6 +1,6 @@
 import { IOrderRepository } from "../repository/repository";
 import { CreateOrderInput, Item, Order } from "../types";
-import { NotificationService } from "../../../messaging-service/src/service";
+import { LoggerService } from "../../../messaging-service/src/service";
 import { IUserRepository } from "../../user/repository/repository";
 
 export type IOrderService = {
@@ -14,7 +14,7 @@ export class OrderService implements IOrderService {
   constructor(
     private orderRepository: IOrderRepository,
     private userRepository: IUserRepository,
-    private notificationService: NotificationService,
+    private loggerService: LoggerService,
   ) {}
 
   async getMenu(): Promise<Item[]> {
@@ -40,7 +40,7 @@ export class OrderService implements IOrderService {
     const user = await this.userRepository.getUserById(input.userId);
 
     if (order && user) {
-      await this.notificationService.notifyOrderPlaced(user, input);
+      await this.loggerService.sendOrderSMS(user, input);
     }
 
     return order;

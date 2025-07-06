@@ -13,6 +13,12 @@ export type CreateOrder = PrismaOrder & {
   itemId: string;
 };
 
+export type UserOrderRank = {
+  userId: string;
+  latestRank: number;
+  countRank: number;
+};
+
 export type CreateOrderInputItem = {
   itemId: string;
   quantity: number;

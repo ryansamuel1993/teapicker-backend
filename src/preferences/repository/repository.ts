@@ -52,9 +52,20 @@ export class PreferencesRepository implements IPreferencesRepository {
   async updatePreferences(
     input: UpdatePreferencesInput,
   ): Promise<Preferences | undefined> {
-    const result = await this.prisma.preferences.update({
+    const user = await this.prisma.user.findUnique({
+      where: { id: input.userId },
+    });
+
+    if (!user) {
+      throw new Error(`User with ID ${input.userId} not found`);
+    }
+
+    const result = await this.prisma.preferences.upsert({
       where: { userId: input.userId },
-      data: mapPreferencesToPrisma(input),
+      update: mapPreferencesToPrisma(input),
+      create: {
+        ...mapPreferencesToPrisma(input),
+      },
     });
 
     return mapPreferencesFromPrisma(result);

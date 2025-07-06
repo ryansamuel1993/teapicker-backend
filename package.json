@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint . --ext .js,.ts",
+    "test": "jest",
     "lint:fix": "npm run lint -- --fix",
     "dev": "ts-node -r tsconfig-paths/register src/index.ts",
     "prisma:generate": "npx prisma generate",
@@ -21,6 +21,7 @@
     "@eslint/js": "^9.30.0",
     "@graphql-codegen/cli": "^5.0.7",
     "@graphql-codegen/typescript-resolvers": "^4.5.1",
+    "@types/jest": "^30.0.0",
     "@types/node": "^24.0.7",
     "@typescript-eslint/eslint-plugin": "^8.35.0",
     "@typescript-eslint/parser": "^8.35.0",
@@ -37,7 +38,9 @@
     "eslint-plugin-prettier": "^5.5.1",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-simple-import-sort": "^12.1.1",
+    "jest": "^30.0.4",
     "prettier": "^3.6.2",
+    "ts-jest": "^29.4.0",
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.8.3"

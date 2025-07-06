@@ -1,5 +1,17 @@
-node_modules
-# Keep environment variables out of version control
-.env
+# Node modules
+node_modules/
+*.env
 
-/src/generated/prisma
+# Prisma SQLite database
+*.db
+*.db-journal
+
+# Generated GraphQL files (adjust paths as needed)
+**/gql/generated/
+**/__generated__/
+**/*.gql.ts
+**/*.graphql.ts
+
+# Optional: Apollo codegen output
+**/graphql.schema.json
+**/graphql-types.ts

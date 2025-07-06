@@ -16,7 +16,7 @@ enum SweetenerType {
 
 enum MilkStrength {
   NONE
-  LIIGHT
+  LIGHT
   MEDIUM
   STRONG
 }

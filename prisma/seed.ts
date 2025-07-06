@@ -94,11 +94,31 @@ async function seed() {
     },
   });
 
-  console.log('👥 Creating 3 additional users...');
-  for (let i = 0; i < 3; i++) {
+  console.log('👥 Creating test users with controlled order history...');
+
+  const testUsers = [
+    {
+      id: 'user1',
+      name: 'Alice',
+      orders: ['2024-01-01', '2024-02-01', '2024-03-01'],
+    },
+    {
+      id: 'user2',
+      name: 'Bob',
+      orders: ['2024-06-01'],
+    },
+    {
+      id: 'user3',
+      name: 'Charlie',
+      orders: ['2024-04-01', '2024-05-01'], 
+    },
+  ];
+
+  for (const { id, name, orders } of testUsers) {
     const user = await prisma.user.create({
       data: {
-        name: faker.person.fullName(),
+        id,
+        name,
         email: faker.internet.email(),
         contactNumber: faker.phone.number(),
         teamId: team.id,
@@ -122,38 +142,41 @@ async function seed() {
       },
     });
 
-    const order = await prisma.order.create({
-      data: {
-        userId: user.id,
-        teamId: team.id,
-        notes: faker.lorem.sentence(),
-        completed: faker.datatype.boolean(),
-        orderType: faker.helpers.arrayElement(Object.values(OrderType)),
-      },
-    });
-
-    const orderItems = faker.helpers.arrayElements(items, faker.number.int({ min: 1, max: 3 }));
-    for (const item of orderItems) {
-      await prisma.orderItem.create({
+    for (const date of orders) {
+      const order = await prisma.order.create({
         data: {
+          userId: user.id,
+          teamId: team.id,
+          notes: faker.lorem.sentence(),
+          completed: true,
+          orderType: OrderType.EXTERNAL,
+          createdAt: new Date(date),
+        },
+      });
+
+      const orderItems = faker.helpers.arrayElements(items, faker.number.int({ min: 1, max: 3 }));
+      for (const item of orderItems) {
+        await prisma.orderItem.create({
+          data: {
+            orderId: order.id,
+            itemId: item.id,
+            quantity: faker.number.int({ min: 1, max: 5 }),
+          },
+        });
+      }
+
+      await prisma.rating.create({
+        data: {
+          userId: user.id,
           orderId: order.id,
-          itemId: item.id,
-          quantity: faker.number.int({ min: 1, max: 5 }),
+          quality: faker.number.int({ min: 1, max: 5 }),
+          service: faker.number.int({ min: 1, max: 5 }),
+          overall: faker.number.int({ min: 1, max: 5 }),
+          voiceNote: Buffer.from(faker.lorem.words(2), 'utf-8'),
+          notes: faker.lorem.words(3),
         },
       });
     }
-
-    await prisma.rating.create({
-      data: {
-        userId: user.id,
-        orderId: order.id,
-        quality: faker.number.int({ min: 1, max: 5 }),
-        service: faker.number.int({ min: 1, max: 5 }),
-        overall: faker.number.int({ min: 1, max: 5 }),
-        voiceNote: Buffer.from(faker.lorem.words(2), 'utf-8'),
-        notes: faker.lorem.words(3),
-      },
-    });
   }
 
   console.log('✅ Seeding complete!');

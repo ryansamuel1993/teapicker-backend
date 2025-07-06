@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { Order, Item, CreateOrderInput } from "../types";
+import { Order, Item, CreateOrderInput, UserOrderRank } from "../types";
 
 export interface IOrderRepository {
   createOrder(input: CreateOrderInput): Promise<Order>;
@@ -8,9 +8,9 @@ export interface IOrderRepository {
   getMenu(): Promise<Item[]>;
   getItemsByIds(itemIds: string[]): Promise<Item[]>;
   getAllItems(): Promise<Item[]>;
-  getUserOrderRanks(
-    userIds: string[],
-  ): Promise<{ userId: string; latestRank: number; countRank: number }[]>;
+  getUserOrderRanks(userIds: string[]): Promise<UserOrderRank[]>;
+  getLatestRanks(userIds: string[]): Promise<Map<string, number>>;
+  getCountRanks(userIds: string[]): Promise<Map<string, number>>;
 }
 
 export class OrderRepository implements IOrderRepository {
@@ -19,6 +19,7 @@ export class OrderRepository implements IOrderRepository {
   async createOrder(input: CreateOrderInput): Promise<Order> {
     const { userId, notes, items, teamId, orderType } = input;
 
+    console.log(notes);
     const result = await this.prisma.order.create({
       data: {
         userId,
@@ -97,9 +98,18 @@ export class OrderRepository implements IOrderRepository {
     });
   }
 
-  async getUserOrderRanks(
-    userIds: string[],
-  ): Promise<{ userId: string; latestRank: number; countRank: number }[]> {
+  async getUserOrderRanks(userIds: string[]): Promise<UserOrderRank[]> {
+    const latestRanks = await this.getLatestRanks(userIds);
+    const countRanks = await this.getCountRanks(userIds);
+
+    return userIds.map((userId) => ({
+      userId,
+      latestRank: latestRanks.get(userId) ?? userIds.length,
+      countRank: countRanks.get(userId) ?? userIds.length,
+    }));
+  }
+
+  public async getLatestRanks(userIds: string[]): Promise<Map<string, number>> {
     const recentOrders = await this.prisma.order.findMany({
       where: { userId: { in: userIds } },
       orderBy: { createdAt: "desc" },
@@ -107,10 +117,11 @@ export class OrderRepository implements IOrderRepository {
     });
 
     const recentUserIds = [...new Set(recentOrders.map((o) => o.userId))];
-    const latestRanks = new Map<string, number>(
-      recentUserIds.map((userId, index) => [userId, index + 1]),
-    );
 
+    return new Map(recentUserIds.map((userId, index) => [userId, index + 1]));
+  }
+
+  public async getCountRanks(userIds: string[]): Promise<Map<string, number>> {
     const orderCounts = await this.prisma.order.groupBy({
       by: ["userId"],
       where: { userId: { in: userIds } },
@@ -129,14 +140,9 @@ export class OrderRepository implements IOrderRepository {
     const sortedByCount = [...usersWithCounts].sort(
       (a, b) => b.count - a.count,
     );
-    const countRanks = new Map<string, number>(
+
+    return new Map(
       sortedByCount.map((entry, index) => [entry.userId, index + 1]),
     );
-
-    return userIds.map((userId) => ({
-      userId,
-      latestRank: latestRanks.get(userId) ?? userIds.length,
-      countRank: countRanks.get(userId) ?? userIds.length,
-    }));
   }
 }

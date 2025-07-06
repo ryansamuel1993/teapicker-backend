@@ -13,9 +13,9 @@ import { PreferencesService } from "./preferences/service/service";
 import { RatingService } from "./rating/service/service";
 import { PlayService } from "./play/service/service";
 
-import { NotificationService } from "../messaging-service/src/worker";
-
-const prisma = new PrismaClient();
+import { LoggerService } from "../messaging-service/src/service";
+import { LogRepository } from "../messaging-service/src/repository";
+import { prisma } from "../container";
 
 export type GQLContext = {
   prisma: PrismaClient;
@@ -25,7 +25,7 @@ export type GQLContext = {
   preferencesService: PreferencesService;
   ratingService: RatingService;
   playService: PlayService;
-  notificationService: NotificationService;
+  loggerService: LoggerService;
 };
 
 export const createContext = (): GQLContext => {
@@ -34,16 +34,24 @@ export const createContext = (): GQLContext => {
   const orderRepo = new OrderRepository(prisma);
   const preferencesRepo = new PreferencesRepository(prisma);
   const ratingRepo = new RatingRepository(prisma);
-  const notificationService = new NotificationService();
+  const loggerRepo = new LogRepository(prisma);
+
+  const loggerService = new LoggerService(loggerRepo);
+  const teamService = new TeamService(teamRepo);
+  const userService = new UserService(userRepo, ratingRepo, preferencesRepo);
+  const orderService = new OrderService(orderRepo, userRepo, loggerService);
+  const preferencesService = new PreferencesService(preferencesRepo);
+  const ratingService = new RatingService(ratingRepo);
+  const playService = new PlayService(orderRepo);
 
   return {
     prisma,
-    teamService: new TeamService(teamRepo),
-    userService: new UserService(userRepo, ratingRepo, preferencesRepo),
-    orderService: new OrderService(orderRepo, userRepo, notificationService),
-    playService: new PlayService(orderRepo),
-    preferencesService: new PreferencesService(preferencesRepo),
-    ratingService: new RatingService(ratingRepo),
-    notificationService: new NotificationService(),
+    teamService,
+    userService,
+    orderService,
+    preferencesService,
+    ratingService,
+    playService,
+    loggerService,
   };
 };

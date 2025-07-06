@@ -1,9 +1,5 @@
-import {
-  UserMedia as GQLMedia,
-  Preferences as GQLPreferences,
-} from "@prisma/client";
+import { UserMedia as GQLMedia } from "@prisma/client";
 import { MediaType, User, UserMedia } from "../../user/types";
-import { mapPreferencesFromPrisma } from "./preferences";
 import { convertNullToUndefined } from "./common";
 
 export function generateRandomAvatarUrl(): string {

@@ -47,7 +47,7 @@ input UpdateUserInput {
   name: String!
   email: String
   contactNumber: String
-  mediaId: ID
+  preferences: CreatePreferencesInput
 }
 
 # --------------------- Responses --------------------#

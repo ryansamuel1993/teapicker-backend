@@ -81,7 +81,13 @@ const averageRatingResolver = async (
   _args: unknown,
   ctx: UserContext,
 ): Promise<number | undefined> => {
-  return await ctx.userService.getAverageRating(parent.id);
+  const rating = await ctx.userService.getAverageRating(parent.id);
+
+  if (!rating) {
+    return undefined;
+  }
+
+  return Math.ceil(rating);
 };
 
 const preferencesResolver = async (

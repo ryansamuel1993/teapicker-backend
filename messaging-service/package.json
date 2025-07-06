@@ -4,8 +4,6 @@
     "start": "ts-node src/worker.ts"
   },
   "dependencies": {
-    "@prisma/client": "^6.11.0",
-    "prisma": "^6.11.0",
     "twilio": "^4.0.0"
   },
   "devDependencies": {
