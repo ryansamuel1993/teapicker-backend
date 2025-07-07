@@ -48,7 +48,7 @@ export class LogRepository implements ILogRepository {
       body,
     });
 
-    await this.prismaClient.sMSLog.create({
+    await this.prismaClient.smsLog.create({
       data: {
         to,
         phoneNumber,

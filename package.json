@@ -9,7 +9,8 @@
     "dev": "ts-node -r tsconfig-paths/register src/index.ts",
     "prisma:generate": "npx prisma generate",
     "prisma:seed": "ts-node prisma/seed.ts",
-    "prisma:gen-seed": "npx prisma generate && npx prisma migrate dev && npm run prisma:seed",
+    "prisma:migrate": "npx prisma migrate dev",
+    "prisma:gen-seed": "npx prisma migrate reset --force --skip-seed && npm run prisma:generate && npm run prisma:migrate && npm run prisma:seed",
     "codegen": "graphql-codegen --config codegen.ts; npx prisma generate",
     "generate:domain": "ts-node ./scripts/generateDomain.ts"
   },

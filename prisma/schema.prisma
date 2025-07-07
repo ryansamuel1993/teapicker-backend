@@ -141,7 +141,7 @@ model EmailLog {
   sentAt    DateTime @default(now())
 }
 
-model SMSLog {
+model smsLog {
   id        String   @id @default(uuid())
   to        String
   phoneNumber String

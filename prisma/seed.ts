@@ -7,13 +7,17 @@ const prisma = new PrismaClient();
 
 async function seed() {
   console.log('🧹 Resetting database...');
-  await prisma.rating.deleteMany();
-  await prisma.orderItem.deleteMany();
-  await prisma.order.deleteMany();
-  await prisma.preferences.deleteMany();
-  await prisma.item.deleteMany();
-  await prisma.user.deleteMany();
-  await prisma.team.deleteMany();
+  await prisma.rating.deleteMany(),
+  await prisma.orderItem.deleteMany(),
+  await prisma.order.deleteMany(),
+  await prisma.preferences.deleteMany(),
+  await prisma.userMedia.deleteMany(),
+  await prisma.item.deleteMany(),
+  await prisma.user.deleteMany(),
+  await prisma.team.deleteMany(),
+  await prisma.emailLog.deleteMany(),
+  await prisma.smsLog.deleteMany(),
+
 
   console.log('🏗️ Creating 1 team...');
   const team = await prisma.team.create({
@@ -110,7 +114,7 @@ async function seed() {
     {
       id: 'user3',
       name: 'Charlie',
-      orders: ['2024-04-01', '2024-05-01'], 
+      orders: ['2024-04-01', '2024-05-01'],
     },
   ];
 
