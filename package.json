@@ -11,7 +11,8 @@
     "prisma:seed": "ts-node prisma/seed.ts",
     "prisma:migrate": "npx prisma migrate dev",
     "prisma:gen-seed": "npx prisma migrate reset --force --skip-seed && npm run prisma:generate && npm run prisma:migrate && npm run prisma:seed",
-    "codegen": "graphql-codegen --config codegen.ts; npx prisma generate",
+    "install:all": "npm install && cd messaging-service && npm install",
+    "codegen": "graphql-codegen --config codegen.ts && prisma generate",
     "generate:domain": "ts-node ./scripts/generateDomain.ts"
   },
   "keywords": [],
@@ -20,6 +21,7 @@
   "description": "",
   "devDependencies": {
     "@eslint/js": "^9.30.0",
+    "@faker-js/faker": "^9.9.0",
     "@graphql-codegen/cli": "^5.0.7",
     "@graphql-codegen/typescript-resolvers": "^4.5.1",
     "@types/jest": "^30.0.0",

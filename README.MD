@@ -36,10 +36,10 @@ Dev Tools:          ts-node, tsconfig-paths
 Package Manager:    npm
 
 # Setup
-
-npm run prisma:generate       # Generate Prisma client
-npm run prisma:seed           # Seed the database
-npm run dev                   # Start the backend
+npm run install:all       # Install all deps
+npm prisma:gen-seed       # Generate Prisma client & Seed the database
+npm run codegen           # Generate GQL files
+npm run dev               # Start the backend
 
 ## Note
 Messaging is turned off by default, blame the UK economy

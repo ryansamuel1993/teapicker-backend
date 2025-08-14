@@ -5,13 +5,12 @@ node_modules/
 *.db
 *.db-journal
 
-# Node modules
-node_modules/
+# Env files
 *.env
 
-# Prisma SQLite database
-*.db
-*.db-journal
+# Lock files
+package-lock.json
+/messaging-service/package-lock.json
 
 # Generated GraphQL files (adjust paths as needed)
 **/gql/generated/
